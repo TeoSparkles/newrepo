@@ -45,3 +45,20 @@ When you installed Git and cloned the remote repository in week 1, you should ha
 1. Go to http://localhost:5500 in a browser tab. Nothing should be visible as the server has not been setup to repond to that route.
 2. Add "/filename.html" to the end of the URL (replacing filename with the name of the file you moved to the public folder).
 3. You should see that page in the browser.
+
+# Each item listed in this file will be ignored by git
+# and will not be uploaded to github. The blank lines
+# and comments are unnecessary, but included for 
+# clarification.
+
+# node_modules is a storage folder for Node and
+# can get very large.
+node_modules
+
+# .env file is for local use only. It contains
+# values not to be shared and most of the values
+# will be manually created by you or dynamically # created on the hosting server
+.env
+
+# .DS_Store is only for Mac users
+**/.DS_Store
