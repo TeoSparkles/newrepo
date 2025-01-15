@@ -12,24 +12,24 @@ const static = require("./routes/static")
 const expressLayouts = require("express-ejs-layouts")
 
 
+/* ***********************
+ * View Engine and Templates
+ *************************/
+app.set("view engine", "ejs")
+app.use(expressLayouts)
+// app.use(express.static('public'))
+app.set("layout", "./layouts/layout") // not at views root
 
 /* ***********************
  * Routes
  *************************/
 app.use(static)
 
-/* ***********************
- * View Engine and Templates
- *************************/
-app.set("view engine", "ejs")
-app.use(expressLayouts)
-app.set("layout", "./layouts/layout") // not at views root
-
-
 //Index route for the index.
 app.get("/", function(req, res){
   res.render("index", {title: "Home"})
 })
+
 
 /* ***********************
  * Local Server Information
