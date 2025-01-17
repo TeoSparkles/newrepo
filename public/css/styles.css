@@ -1,11 +1,11 @@
 /*------ Root parts for the CSS -------*/
 :root {
   /* color coding */
-  --heading-background-color: rgb(88, 152, 175);
+  --heading-background-color: rgb(64, 149, 179);
   --primary-color: #000000;
-  --secondary-color: #608ebc;
-  --accent1: #cfcfb4;
-  --accent2: #f3f3f3;
+  --secondary-color: #12471d;
+  --accent1: #4db085;
+  --accent2: #ffffff;
 
   /* font styles */
   --heading-font-family: Georgia;
@@ -20,88 +20,122 @@
   --text-decoration: none;
   --color: black;
 }
+/*---------------------- This is the desktop mode. ----------------------*/
 
 /******* Change Box Model ***************/
 *,
 *:before,
 *:after {
   box-sizing: border-box;
+  font-family: var(--heading-font-family);
 }
 
+h1, h2, h3, h4 {
+  font-family: var(--heading-font-family);
+  font-weight: var(--heading-font-weight);
+}
 /********** For the Body *************/
 /* Body with a wrapper and content. */
-#wrapper{
+#wrapper {
+  width: 100%;
   background-color: var(--accent2);
-  border: 5px black solid;
-  box-shadow: 2px 2px 10px black;
+  border: 5px solid var(--secondary-color);
+  max-width: 800px;
+  box-shadow: 2px 2px 10px var(--secondary-color);
   padding: 10px;
 }
 
 body {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
   background-image: url("/images/site/small_check.jpg");
   background-position: top;
   background-repeat: repeat;
   /* background-size: 50%; */
   background-attachment: fixed;
-  transition: padding 1s;
 }
-/************** For the header *************/
+
+
+
+
+
+/***************** For the header ****************/
 
 /* Background of the header */
-#top-header {
-  margin-bottom: 10px;
-  border: 1px solid black;
-}
-#top-header a {
-  text-decoration: none;
-  color: Green;
+header {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  /* margin: 10px; */
 }
 
-/* Site Name with a logo */
-.siteName {
-  /* text-align: left; */
-  font-size: 50px;
+#top-header a {
+  text-decoration: none;
+  color: var(--primary-color);
+  /* margin-top: 1px; */
+}
+
+/* Site Name and a logo */
+.logo{
+  background-color: white;
+  float: left;
+  margin-top: 20px;
+  margin-bottom: 20px;
+}
+.siteName{
+  text-align: left;
+  font-size: 30px;
   margin: 10px;
   /* padding: 10px; */
 }
 .siteName img {
   height: auto;
   width: 100px;
-  margin-top: 20px;
+  float: left;
+  /* margin-top: 20px; */
   /* margin: 10px; */
 }
 
+/* The My Account area. */
 #tools {
   float: right;
-  margin-top: 40px;
-  margin-right: 20px;
+  margin-top: 4%;
+  /* margin-right: 20px; */
   font-size: 18px;
 }
 #tools a {
   text-decoration: none;
 }
+
+/* The navigation area. */
 nav {
+  /* margin-top: 20px; */
   background-color: var(--accent1);
   width: 100%;
-  padding: 1px;
-  font-size: 20px;
+  
   text-align: center;
-  border: 5px solid var(--secondary-color);
-  border-radius: 0.5rem;
+  border: 1px solid var(--secondary-color);
   box-shadow: 0px 0px 10px var(--secondary-color);
+  border-radius: 0.4rem;
+  /* padding: 1px; */
+  /* font-size: 20px; */
 }
-li {
+/* nav li {
   list-style-type: none;
   display: inline;
-  padding: 10px;
-}
-ul {
+  padding: 1px;
+} */
+nav ul {
   display: flex;
+  flex-wrap: wrap;
+  list-style: none;
   flex-direction: row;
   justify-content: space-around;
-  margin: 0;
-  padding: 0;
-  overflow: hidden;
+  margin: 10px;
+  padding: 0px;
+  gap: 1rem;
+  /* overflow: hidden; */
 }
 nav a {
   display: block;
@@ -110,19 +144,163 @@ nav a {
   text-decoration: none;
 }
 
-/* li{
-  display: inline;
-  float: left;
+/* Hero section. */
 
+.hero {
+  padding: 1rem;
+  background-color: white;
+  width: 100%;
+  position: relative;
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  align-items: center;
+  justify-content: center;
+  border-radius: 0.5rem;
+  box-shadow: 0px 6px 20px rgba(0, 0, 0, 0.111);
 }
 
-li a {
-  display: block;
-  padding: 8px;
-} */
+.hero img {
+  width: 100%;
+  grid-column: 1/4;
+  grid-row: 1/2;
+  justify-self: center;
+}
 
+.hero-text {
+  display: flex;
+  flex-direction: column;
+  grid-column: 1/2;
+  grid-row: 1/2;
+  width: fit-content;
+  background-color: rgba(255, 255, 255, 0.703);
+  color: var(--secondary-color);
+  /* color: var(--pop); */
+  padding: 0.5rem;
+  box-shadow: 0 0 20px rgba(0, 102, 255, 0.092);
+}
 
-footer{
+/******* Content area. **********/
+.content {
+  display: flex;
+  justify-content: center;
+  /* flex-direction: row; */
+  flex-direction: row;
+  width: 100%;
+  margin: 10px;
+}
+
+.content-a {
+  margin: 10px;
+  /* width: 100%; */
+  /* order: 1; */
+}
+.content-b {
+  margin: 10px;
+  /* width: 100%; */
+  /* order: 2; */
+}
+.content-b li{
+  width: 100%;
+}
+
+/* Gallery */
+.gallery {
+  display: grid;
+  width: 100%;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.5rem;
+  padding-left: 0.1rem;
+  padding-right: 0.1rem;
+}
+.gallery h1{
+  grid-row: 3/3;
+}
+/* Caption Image */
+.caption-image {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background-color: var(--accent2);
+  border: 2px solid black;
+  color: var(--primary-color);
+  border-radius: 0.5rem;
+  overflow: hidden;
+}
+
+/********* Footer ********/
+footer {
+  overflow: hidden;
   border-top: 1px solid black;
   margin-top: 10px;
+}
+
+/*------------------------------ For mobile. ---------------------------*/
+@media screen and (max-width: 700px) {
+  .siteName{
+    font-size: medium;
+  }
+  .siteName img {
+
+    width: 50px;
+  }
+  #tools {
+    font-size: 14px;
+  }
+ 
+  .content {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1rem;
+    width: 100%;
+  }
+ 
+  .content-a {
+    font-size: large;
+    /* grid-column: 1/2; */
+    grid-row: 1/2;
+  }
+  .content-b {
+    font-size: large;
+    grid-row: 2/2;
+  }
+  .caption-image > div {
+    /* border: 1px solid var(--secondary-fg); */
+    width: 100%;
+    height: auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
+  .caption-image > p {
+    padding: 0.5rem;
+    margin: 0;
+    background-color: rgba(255, 255, 255, 0.127);
+    width: 100%;
+    text-align: center;
+    color: var(--secondary-fg);
+  }
+#tools{
+  margin-top: 5%;
+}
+  .hero {
+    font-size: medium;
+    grid-template-columns: 1fr;
+  }
+  .hero-text {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    grid-row: 2/2;
+    width: 100%;
+    background-color: rgba(255, 255, 255, 0.703);
+    padding: 0.5rem;
+    box-shadow: 0 0 20px rgba(0, 102, 255, 0.092);
+  }
+  .hero-text img{
+    width: 250px;
+    height: auto;
+  }
+   
 }
