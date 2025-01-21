@@ -183,19 +183,19 @@ nav a {
 .content {
   display: flex;
   justify-content: center;
-  /* flex-direction: row; */
-  flex-direction: row;
   width: 100%;
-  margin: 10px;
+  /* flex-direction: row; */
+  /* flex-direction: row; */
+  /* margin: 10px; */
 }
 
 .content-a {
-  margin: 10px;
+  margin: 20px;
   /* width: 100%; */
   /* order: 1; */
 }
 .content-b {
-  margin: 10px;
+  margin: 20px;
   /* width: 100%; */
   /* order: 2; */
 }
@@ -213,12 +213,13 @@ nav a {
   padding-right: 0.1rem;
 }
 .gallery h1{
-  grid-row: 3/3;
+  grid-row: 2/2;
 }
 /* Caption Image */
 .caption-image {
   width: 100%;
   display: flex;
+  
   flex-direction: column;
   align-items: center;
   background-color: var(--accent2);
