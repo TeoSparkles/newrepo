@@ -11,7 +11,7 @@ SELECT * FROM inventory;
 -- DELETE FROM account WHERE account_firstname='Tony';
 
 -- Select from account
-SELECT * FROM account;
+-- SELECT * FROM account;
 
 
 
