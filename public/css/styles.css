@@ -238,6 +238,10 @@ footer {
 
 /*------------------------------ For mobile. ---------------------------*/
 @media screen and (max-width: 700px) {
+  body{
+    background-image: none;
+    background-color: var(--accent2);
+  }
   .siteName{
     font-size: medium;
   }
