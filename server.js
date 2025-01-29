@@ -19,6 +19,7 @@ const utilities = require("./utilities/");
  *************************/
 app.set("view engine", "ejs");
 app.use(expressLayouts);
+app.get('/favicon.ico', (req, res) => res.status(204).end()); // 204 No Content - empty response
 app.set("layout", "./layouts/layout"); // not at views root
 // app.use(express.static('public'))
 
@@ -43,7 +44,7 @@ app.use("/inv", inventoryRoute);
 app.use(async (req, res, next) => {
   next({
     status: 404,
-    message: "Unfortunately, we appear to have lost that page.",
+    message: "Sorry, we appear to have lost that page.",
   });
 });
 
