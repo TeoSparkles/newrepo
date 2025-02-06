@@ -1,9 +1,9 @@
 const invModel = require("../models/inventory-model");
 const Util = {};
 
-/* ************************
- * Constructs the nav HTML unordered list
- ************************** */
+/*****************************************
+ * Constructs the nav HTML unordered list*
+ *****************************************/
 Util.getNav = async function (req, res, next) {
   let data = await invModel.getClassifications();
   let list = "<ul>";
@@ -27,8 +27,8 @@ Util.getNav = async function (req, res, next) {
 module.exports = Util;
 
 /* **************************************
- * Build the classification view HTML
- * ************************************ */
+ * Build the classification view HTML****
+ * **************************************/
 Util.buildClassificationGrid = async function (data) {
   let grid;
   if (data.length > 0) {
@@ -79,15 +79,14 @@ Util.buildClassificationGrid = async function (data) {
   return grid;
 };
 
-
 /* **************************************
- * *******Build the Detail view HTML*****
+ * ******Build the details view HTML*****
  * *************************************/
 Util.buildInventoryGrid = async function (data) {
   let grid;
   if (data.length > 0) {
-      grid='<div class="inv-detail">';
-      data.forEach((vehicle) => {
+    grid = '<div class="inv-detail">';
+    data.forEach((vehicle) => {
       grid +=
         '<img src="' +
         vehicle.inv_image +
@@ -97,34 +96,28 @@ Util.buildInventoryGrid = async function (data) {
         vehicle.inv_model +
         ' on CSE Motors">';
       // grid += '<div >'
-      grid += '<ul class= inv-description>' ;
-      grid += '<li><h2>Details</h2></li>';
-      grid +=  '<li><b>Description: </b>' + vehicle.inv_description + '</li>';
+      grid += "<ul class= inv-description>";
+      grid += "<li><h2>Details</h2></li>";
+      grid += "<li><b>Description: </b>" + vehicle.inv_description + "</li>";
       grid +=
         "<li><b>Price: </b>" +
-        '<span>$' +
+        "<span>$" +
         new Intl.NumberFormat("en-US").format(vehicle.inv_price) +
-        '</span></li>'
+        "</span></li>";
       grid +=
         "<li><b> Mileage </b>: " +
         Intl.NumberFormat("en-US").format(vehicle.inv_miles) +
         "</li>";
 
-      grid += "<li><b>Color </b>: " + vehicle.inv_color + '</li></ul></div>';
+      grid += "<li><b>Color </b>: " + vehicle.inv_color + "</li></ul></div>";
       // grid += '</div>';
-      });
+    });
   } else {
     grid += '<p class="notice">Sorry, no matching vehicles could be found.</p>';
   }
 
   return grid;
 };
-
-
-
-
-
-
 
 /* ****************************************
  * Middleware For Handling Errors
