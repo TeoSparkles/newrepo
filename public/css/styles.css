@@ -4,7 +4,7 @@
   --heading-background-color: rgb(64, 149, 179);
   --primary-color: #000000;
   --secondary-color: #12471d;
-  --accent1: #4db085;
+  --accent1: #1b4224;
   --accent2: #ffffff;
 
   /* font styles */
@@ -117,7 +117,7 @@ nav {
 
   text-align: center;
   border: 1px solid var(--secondary-color);
-  box-shadow: 0px 0px 10px var(--secondary-color);
+  box-shadow: 0px 0px 10px var(--primary-color);
   border-radius: 0.4rem;
   /* padding: 1px; */
   /* font-size: 20px; */
@@ -480,8 +480,6 @@ footer {
   .inv-description li {
     margin: 0px;
     padding: 10px;
-    list-style: none;
-    background-color: yellow;
   }
 
   /**************************** Error Message Screen ************************************/
