@@ -1,11 +1,9 @@
-const express = require("express")
-const router = new express.Router() 
-// const invController = require("../controllers/invController")
-// router.get("/type/:classificationId", utilities.handleErrors(invController, buildByClassificationId))
+const express = require("express");
+const router = new express.Router();
 
-// Route to build inventory by classification view
+// Route to error view to provide an optional error message.
 router.get("/error", (req, res) => {
-    throw new Error("This server was crashed.");
+  throw new Error("The server has been crashed. Try a different route");
 });
 
 module.exports = router;

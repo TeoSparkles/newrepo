@@ -47,7 +47,7 @@ h4 {
   box-shadow: 2px 2px 10px var(--secondary-color);
   padding: 5px 10px;
 }
-#wrapper h1{
+#wrapper h1 {
   padding: 10px;
 }
 body {
@@ -332,18 +332,17 @@ footer {
 }
 
 /**************************** Error Message Screen ************************************/
-.error-display{
+.error-display {
   text-align: center;
   margin: 20px;
   padding: 20px;
 }
-.error-display h1{
+.error-display h1 {
   font-size: 80px;
 }
-.error-display p{
+.error-display p {
   font-size: 24px;
 }
-
 
 /*------------------------------ For mobile. ---------------------------*/
 @media screen and (max-width: 700px) {
@@ -351,7 +350,7 @@ footer {
     background-image: none;
     background-color: var(--accent2);
   }
-  h1{
+  h1 {
     text-align: center;
   }
   .siteName {
@@ -424,7 +423,7 @@ footer {
     display: grid;
     grid-template-columns: 1fr;
   }
-  #inv-display li{
+  #inv-display li {
     width: 100%;
     /* height: auto; */
   }
@@ -485,11 +484,11 @@ footer {
     background-color: yellow;
   }
 
-/**************************** Error Message Screen ************************************/
-.error-display h1{
-  font-size: 40px;
-}
-.error-display p{
-  font-size: 16px;
-}
+  /**************************** Error Message Screen ************************************/
+  .error-display h1 {
+    font-size: 40px;
+  }
+  .error-display p {
+    font-size: 16px;
+  }
 }

@@ -11,16 +11,16 @@ const env = require("dotenv").config();
 const app = express();
 const static = require("./routes/static");
 const baseController = require("./controllers/baseController");
-const inventoryRoute = require("./routes/inventoryRoute");
-const utilities = require("./utilities/");
-const errorRouter = require("./routes/errorRoute")
+const inventoryRoute = require("./routes/inventoryRoute"); //Connected to inventory route.
+const utilities = require("./utilities/"); //Connected to the utilities route.
+const errorRouter = require("./routes/errorRoute"); //Connected to the Error Route
 /* **************************
  * View Engine and Templates*
  ****************************/
 app.set("view engine", "ejs");
 app.use(expressLayouts);
-app.get('/favicon.ico', (req, res) => res.status(204).end()); //No response on this code.
-app.set("layout", "./layouts/layout"); 
+app.get("/favicon.ico", (req, res) => res.status(204).end()); //No response on this code.
+app.set("layout", "./layouts/layout");
 // app.use(express.static('public'))
 
 /* ***********************
@@ -34,17 +34,11 @@ app.get("/", utilities.handleErrors(baseController.buildHome));
 
 // Inventory routes
 app.use("/inv", inventoryRoute);
+app.use(errorRouter); //Using the errorRouter for the errorRoute
 
-app.use(errorRouter);
-
-
-
-
-// utilities.handleErrors(baseController.buildHome);
 // res.render("index", { title: "Home" });
 // app.get("/", function (req, res) {
 // });
-
 
 // File Not Found Route - must be last route in list
 app.use(async (req, res, next) => {
@@ -53,14 +47,6 @@ app.use(async (req, res, next) => {
     message: "Sorry, we appear to have lost that page.",
   });
 });
-
-// // Server not found route
-// app.use(async (req, res, next) => {
-//   next({
-//     status: 500,
-//     message: "It appears the server has crashed.",
-//   });
-// });
 
 /* *********************************
  * Express Error Handler           *
@@ -72,18 +58,17 @@ app.use(async (err, req, res, next) => {
   if (err.status == 404) {
     message = err.message;
   } else {
-    message = "It appears that the server was crashed. How about try a different route?";
-    // message = err.message;
+    message =
+      "It appears that the server was crashed. How about try a different route?";
+    // message = err.message; This is an optional message for the errorRoute.js
   }
-  
+
   res.render("errors/error", {
-    title: err.status || 'Server Error',
+    title: err.status || "Server Error",
     message,
     nav,
   });
 });
-
-
 
 /* ***********************
  * Local Server Information
