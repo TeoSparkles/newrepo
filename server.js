@@ -3,7 +3,7 @@
  * application. It is used to control the project.
  *******************************************/
 /* ***********************
- * Require Statements
+ * Require Statements    *
  *************************/
 const express = require("express");
 const expressLayouts = require("express-ejs-layouts");
@@ -13,18 +13,18 @@ const static = require("./routes/static");
 const baseController = require("./controllers/baseController");
 const inventoryRoute = require("./routes/inventoryRoute");
 const utilities = require("./utilities/");
-
-/* ***********************
- * View Engine and Templates
- *************************/
+const errorRouter = require("./routes/errorRoute")
+/* **************************
+ * View Engine and Templates*
+ ****************************/
 app.set("view engine", "ejs");
 app.use(expressLayouts);
-app.get('/favicon.ico', (req, res) => res.status(204).end()); // 204 No Content - empty response
-app.set("layout", "./layouts/layout"); // not at views root
+app.get('/favicon.ico', (req, res) => res.status(204).end()); //No response on this code.
+app.set("layout", "./layouts/layout"); 
 // app.use(express.static('public'))
 
 /* ***********************
- * Routes
+ * Routes                *
  *************************/
 app.use(static);
 
@@ -35,10 +35,16 @@ app.get("/", utilities.handleErrors(baseController.buildHome));
 // Inventory routes
 app.use("/inv", inventoryRoute);
 
+app.use(errorRouter);
+
+
+
+
+// utilities.handleErrors(baseController.buildHome);
 // res.render("index", { title: "Home" });
 // app.get("/", function (req, res) {
-
 // });
+
 
 // File Not Found Route - must be last route in list
 app.use(async (req, res, next) => {
@@ -48,10 +54,18 @@ app.use(async (req, res, next) => {
   });
 });
 
-/* ***********************
- * Express Error Handler
- * Place after all other middleware
- *************************/
+// // Server not found route
+// app.use(async (req, res, next) => {
+//   next({
+//     status: 500,
+//     message: "It appears the server has crashed.",
+//   });
+// });
+
+/* *********************************
+ * Express Error Handler           *
+ * Place after all other middleware*
+ ***********************************/
 app.use(async (err, req, res, next) => {
   let nav = await utilities.getNav();
   console.error(`Error at: "${req.originalUrl}": ${err.message}`);
@@ -59,13 +73,17 @@ app.use(async (err, req, res, next) => {
     message = err.message;
   } else {
     message = "It appears that the server was crashed. How about try a different route?";
+    // message = err.message;
   }
+  
   res.render("errors/error", {
-    title: err.status || "Server Error",
+    title: err.status || 'Server Error',
     message,
     nav,
   });
 });
+
+
 
 /* ***********************
  * Local Server Information
