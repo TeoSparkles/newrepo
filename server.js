@@ -19,7 +19,7 @@ const errorRouter = require("./routes/errorRoute"); //Connected to the Error Rou
  ****************************/
 app.set("view engine", "ejs");
 app.use(expressLayouts);
-app.get("/favicon.ico", (req, res) => res.status(204).end()); //No response on this code.
+app.get("/favicon.ico", (req, res) => res.status(204).end()); //This code does not response.
 app.set("layout", "./layouts/layout");
 // app.use(express.static('public'))
 
