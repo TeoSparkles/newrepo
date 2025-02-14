@@ -376,8 +376,8 @@ span{
   font-style: italic;
   font: 12px;
 }
-input:required:invalid, input:focus:invalid {
-  background-color: red;
+input:focus:invalid {
+  background-color: rgb(239, 131, 131);
   /* background-position: right top; */
   /* background-repeat: no-repeat; */
  }
