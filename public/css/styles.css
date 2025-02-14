@@ -37,6 +37,13 @@ h4 {
   font-family: var(--heading-font-family);
   font-weight: var(--heading-font-weight);
 }
+
+/********** For the Message *************/
+#messages {
+  color: red;
+  font-style: italic;
+}
+
 /********** For the Body *************/
 /* Body with a wrapper and content. */
 #wrapper {
@@ -331,6 +338,60 @@ footer {
   /* background-color: yellow; */
 }
 
+/******************************* Account Screen ****************************/
+.form-account{
+  background-color: var(--accent1);
+  max-width: 500px;
+  height: auto;
+  margin: 10px;
+  font: 14px;
+  /* display: flex; */
+  /* justify-content: center; */
+  /* padding-left: 100px;
+  padding-right: 100px; */
+  /* text-align: center; */
+  color: white;
+  border: var(--primary-color) solid 5px;
+  border-radius: 0.5rem;
+}
+.form-account-content{
+  display: grid;
+  grid-template-columns: 1fr;
+  text-align: left;
+  /* align-items: center; */
+  /* display: flex; */
+  margin: 10px;
+  /* justify-content: center; */
+}
+.form-account-button{
+  text-align: center;
+  /* display: flex; */
+  margin: 10px;
+  /* justify-content: center; */
+}
+.form-account-button a{
+  color: white;
+}
+span{
+  font-style: italic;
+  font: 12px;
+}
+input:required:invalid, input:focus:invalid {
+  background-color: red;
+  /* background-position: right top; */
+  /* background-repeat: no-repeat; */
+ }
+ input:required:valid {
+  background-color: lightgreen;
+  /* background-position: right top; */
+  /* background-repeat: no-repeat; */
+}
+button{
+  background-color: white;
+  color: black;
+  padding: 5px;
+  font-size: 20px;
+}
 /**************************** Error Message Screen ************************************/
 .error-display {
   text-align: center;

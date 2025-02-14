@@ -1,0 +1,34 @@
+<h1><%- title %></h1>
+
+<div id="messages">
+  <%- messages() %>
+</div>
+<form class="form-account" action="/account/login" method="post">
+  <fieldset>
+    <div class="form-account-content">
+      <label for="account_email">Email:</label><br />
+      <input
+        type="email"
+        name="account_email"
+        id="account_email"
+        required
+        autocomplete="on"
+      />
+    </div>
+
+    <div class="form-account-content">
+      <label for="account_password">Password:</label><br />
+      <input
+        type="password"
+        name="account_password"
+        id="account_password"
+        autocomplete="on"
+        required
+      />
+    </div>
+    <div class="form-account-button">
+      <button type="submit">Login</button>
+      <p>No account? <a href="/account/register">Sign-up</a></p>
+    </div>
+  </fieldset>
+</form>

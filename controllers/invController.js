@@ -1,5 +1,5 @@
 const invModel = require("../models/inventory-model");
-const utilities = require("../utilities/");
+const utilities = require("../utilities");
 
 const invCont = {};
 
@@ -37,5 +37,16 @@ invCont.buildByInventoryId = async function (req, res, next) {
   });
 };
 
+/* ****************************************
+ *  Deliver add-classification view
+ * *************************************** */
+// async function buildAddClassification(req, res, next) {
+//   // req.flash("notice", "This is a flash message.")
+//   let nav = await utilities.getNav();
+//   res.render("./inventory/add-classification", {
+//     title: "Add New Classification",
+//     nav,
+//   });
+// }
 
-module.exports = invCont;
+module.exports = invCont; //{ buildAddClassification }

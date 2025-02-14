@@ -13,7 +13,12 @@ const static = require("./routes/static");
 const baseController = require("./controllers/baseController");
 const inventoryRoute = require("./routes/inventoryRoute"); //Connected to inventory route.
 const utilities = require("./utilities/"); //Connected to the utilities route.
-const errorRouter = require("./routes/errorRoute"); //Connected to the Error Route
+const errorRoute = require("./routes/errorRoute"); //Connected to the Error Route
+const session = require("express-session"); //This is Unit 4/W6 Session
+const pool = require("./database"); //This is Unit 4/W6 Session
+const accountRoute = require("./routes/accountRoute"); //This is Unit 4/W6 Session
+const bodyParser = require("body-parser")
+
 /* **************************
  * View Engine and Templates*
  ****************************/
@@ -24,6 +29,33 @@ app.set("layout", "./layouts/layout");
 // app.use(express.static('public'))
 
 /* ***********************
+ * Middleware
+ * ************************/
+app.use(
+  session({
+    store: new (require("connect-pg-simple")(session))({
+      createTableIfMissing: true,
+      pool,
+    }),
+    secret: process.env.SESSION_SECRET,
+    resave: true,
+    saveUninitialized: true,
+    name: "sessionId",
+  })
+);
+
+// Express Messages Middleware
+app.use(require('connect-flash')())
+app.use(function(req, res, next){
+  res.locals.messages = require('express-messages')(req, res)
+  next()
+})
+
+// W6 Process registration activity
+app.use(bodyParser.json())
+app.use(bodyParser.urlencoded({ extended: true })) // for parsing application/x-www-form-urlencoded
+
+/* ***********************
  * Routes                *
  *************************/
 app.use(static);
@@ -32,13 +64,16 @@ app.use(static);
 app.get("/", utilities.handleErrors(baseController.buildHome));
 // res.render("index", { title: "Home" });
 
-// Inventory routes
+//Inventory routes
 app.use("/inv", inventoryRoute);
-app.use(errorRouter); //Using the errorRouter for the errorRoute
 
-// res.render("index", { title: "Home" });
-// app.get("/", function (req, res) {
-// });
+//Error routes
+app.use(errorRoute); //Using the errorRoute for the errorRoute
+
+//Account routes
+app.use("/account", accountRoute);
+
+
 
 // File Not Found Route - must be last route in list
 app.use(async (req, res, next) => {
