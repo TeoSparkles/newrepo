@@ -17,7 +17,7 @@ const errorRoute = require("./routes/errorRoute"); //Connected to the Error Rout
 const session = require("express-session"); //This is Unit 4/W6 Session
 const pool = require("./database"); //This is Unit 4/W6 Session
 const accountRoute = require("./routes/accountRoute"); //This is Unit 4/W6 Session
-const bodyParser = require("body-parser")
+const bodyParser = require("body-parser");
 
 /* **************************
  * View Engine and Templates*
@@ -45,15 +45,15 @@ app.use(
 );
 
 // Express Messages Middleware
-app.use(require('connect-flash')())
-app.use(function(req, res, next){
-  res.locals.messages = require('express-messages')(req, res)
-  next()
-})
+app.use(require("connect-flash")());
+app.use(function (req, res, next) {
+  res.locals.messages = require("express-messages")(req, res);
+  next();
+});
 
 // W6 Process registration activity
-app.use(bodyParser.json())
-app.use(bodyParser.urlencoded({ extended: true })) // for parsing application/x-www-form-urlencoded
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true })); // for parsing application/x-www-form-urlencoded
 
 /* ***********************
  * Routes                *
@@ -73,7 +73,7 @@ app.use(errorRoute); //Using the errorRoute for the errorRoute
 //Account routes
 app.use("/account", accountRoute);
 
-
+// Management route.
 
 // File Not Found Route - must be last route in list
 app.use(async (req, res, next) => {

@@ -26,7 +26,7 @@ SET inv_description = REPLACE(inv_description, 'small interiors', 'a huge interi
 -- from the classification table for inventory items that belong to the "Sport" category.
 -- Advice: Take note of the variable of the inclusions with the table followed by the column type.
 SELECT i.inv_make, i.inv_model, c.classification_name FROM INVENTORY i 
-INNER JOIN classification c ON i.classification_id = c.classification_id WHERE classification_name = 'Sport'
+INNER JOIN classification c ON i.classification_id = c.classification_id WHERE classification_name = 'Sport';
 
 
 -- Update all records in the inventory table to add "/vehicles" to the middle of the file path in the inv_image and inv_thumbnail columns using a single query.

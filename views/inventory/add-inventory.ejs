@@ -1,0 +1,121 @@
+<h1><%=title%></h1>
+<div id="messages">
+  <% if (errors) { %>
+  <ul class="notice">
+    <% errors.array().forEach(error => { %>
+    <li><%= error.msg %></li>
+    <% }) %>
+  </ul>
+  <% } %>
+</div>
+
+<form action="/inv/add-inventory" method="post" class="form-account">
+  <fieldset>
+    <div class="form-account-content">
+      <label for="classificationList">Classification Name:</label><br />
+      <%- classificationList %>
+    </div>
+
+    <div class="form-account-content">
+      <label for="inventoryMake">Make:</label><br />
+      <input
+        type="text"
+        name="inv_make"
+        id="inventoryMake"
+        required
+        minlength="3"
+        value="<%= locals.inv_make %>"
+      />
+    </div>
+    <div class="form-account-content">
+      <label for="inventoryModel">Model:</label><br />
+      <input
+        type="text"
+        name="inv_model"
+        id="inventoryModel"
+        required
+        minlength="3"
+        value="<%= locals.inv_model %>"
+      />
+    </div>
+    <div class="form-account-content">
+      <label for="inventoryDescription">Description:</label><br />
+      <textarea
+        name="inv_description"
+        id="inventoryDescription"
+        rows="10px"
+        cols="40px"
+      >
+      </textarea>
+    </div>
+
+    <div class="form-account-content">
+      <label for="inventoryImage">Image Path:</label><br />
+      <input
+        type="text"
+        name="inv_image"
+        id="inventoryImage"
+        value="/images/vehicles/no-image.png"
+        required
+      />
+    </div>
+
+    <div class="form-account-content">
+      <label for="inventoryThumbnail">Image Thumbnail:</label><br />
+      <input
+        type="text"
+        name="inv_thumbnail"
+        id="inventoryThumbnail"
+        value="/images/vehicles/no-image-tn.png"
+        required
+      />
+    </div>
+
+    <div class="form-account-content">
+      <label for="inventoryPrice">Price:</label><br />
+      <input
+        type="text"
+        name="inv_price"
+        id="inventoryPrice"
+        required
+        maxlength="7"
+        value="<%= locals.inv_price %>"
+      />
+    </div>
+
+    <div class="form-account-content">
+      <label for="inventoryYear">Year:</label><br />
+      <input
+        type="text"
+        name="inv_year"
+        id="inventoryYear"
+        maxlength="4"
+        required
+        value="<%= locals.inv_year %>"
+      />
+    </div>
+    <div class="form-account-content">
+      <label for="inventoryMiles">Miles:</label><br />
+      <input
+        type="text"
+        name="inv_miles"
+        id="inventoryMiles"
+        required
+        value="<%= locals.inv_miles %>"
+      />
+    </div>
+    <div class="form-account-content">
+      <label for="inventoryColor">Color:</label><br />
+      <input
+        type="text"
+        name="inv_color"
+        id="inventoryColor"
+        required
+        value="<%= locals.inv_color %>"
+      />
+    </div>
+    <div class="form-account-button">
+      <button type="submit">Add Inventory</button>
+    </div>
+  </fieldset>
+</form>

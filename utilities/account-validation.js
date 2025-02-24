@@ -12,12 +12,16 @@ validate.registrationRules = () => {
     body("account_firstname")
       .trim()
       .escape()
+      .notEmpty()
+      .withMessage("Please enter the form.")
       .isLength({ min: 1 })
       .withMessage("Please provide a first name."), // on error this message is sent.
     // lastname is required and must be string
     body("account_lastname")
       .trim()
       .escape()
+      .notEmpty()
+      .withMessage("Please enter the form.")
       .isLength({ min: 2 })
       .withMessage("Please provide a last name."), // on error this message is sent.
 
@@ -28,7 +32,9 @@ validate.registrationRules = () => {
       .normalizeEmail() // refer to validator.js docs
       .withMessage("A valid email is required.")
       .custom(async (account_email) => {
-        const emailExists = await accountModel.checkExistingEmail(account_email);
+        const emailExists = await accountModel.checkExistingEmail(
+          account_email
+        );
         if (emailExists) {
           throw new Error(
             "Email exists. Please log in or use different email."

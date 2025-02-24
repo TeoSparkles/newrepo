@@ -1,0 +1,51 @@
+<h1><%= title %></h1>
+<div id="messages">
+  <% if (errors) { %>
+  <ul class="notice">
+    <% errors.array().forEach(error => { %>
+    <li><%= error.msg %></li>
+    <% }) %>
+  </ul>
+  <% } %>
+</div>
+<script>
+  document
+    .getElementById("classificationForm")
+    .addEventListener("submit", function (event) {
+      var classification_name = document.getElementById(
+        "classification_name"
+      ).value;
+      var regex = /^[A-Za-z]+$/; // W7 Validation for alphanumeric input only
+      
+      // if (!regex.test(classificationName)) {
+      //   event.preventDefault(); // Prevent form submission
+      //   alert(
+      //     "Classification name can only contain letters and numbers, no spaces or special characters"
+      //   );
+      // }
+    });
+</script>
+
+<form
+  class="form-account"
+  action="/inv/add-classification"
+  id="classificationForm"
+  method="post"
+>
+  <fieldset>
+    <div class="form-account-content">
+      <label for="classification_name">Classification Name:</label><br />
+      <input
+        type="text"
+        name="classification_name"
+        id="classification_name"
+        required
+        pattern="^[A-Za-z]+$"
+      />
+    </div>
+
+    <div class="form-account-button">
+      <button type="submit">Add Classification</button>
+    </div>
+  </fieldset>
+</form>
