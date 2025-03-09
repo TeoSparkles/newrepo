@@ -13,6 +13,9 @@ router.get("/login", utilities.handleErrors(accountController.buildLogin))
 /* Deliver Register View W6 */
 router.get("/register", utilities.handleErrors(accountController.buildRegister))
 
+/* Deliver Account Management View W9 */
+router.get("/", utilities.checkLogin, utilities.handleErrors(accountController.accountManagement))
+
 /* Post Register view*/
 // router.post('/register', utilities.handleErrors(accountController.registerAccount))
 
@@ -23,17 +26,12 @@ router.post(
     regValidate.checkRegData,
     utilities.handleErrors(accountController.registerAccount)
   )
-  
-  
-
-// W6 Process the login attempt
+/* W9 Provide the Log-in */
 router.post(
   "/login",
-  (req, res) => {
-    res.status(200).send('login process')
-  }
+  regValidate.loginRules(),
+  regValidate.checkLoginData,
+  utilities.handleErrors(accountController.accountLogin)
 )
-
-
 
 module.exports = router;

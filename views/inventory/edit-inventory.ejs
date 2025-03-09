@@ -1,4 +1,4 @@
-<h1><%=title%></h1>
+<h1><%= title %></h1>
 <div id="messages">
   <% if (errors) { %>
   <ul class="notice">
@@ -9,7 +9,7 @@
   <% } %>
 </div>
 
-<form action="/inv/add-inventory" method="post" class="form-account">
+<form action="/inv/update" method="post" class="form-account">
   <fieldset>
     <div class="form-account-content">
       <label for="classificationSelect">Classification Name:</label><br />
@@ -112,8 +112,12 @@
         value="<%= locals.inv_color %>"
       />
     </div>
+    <input type="hidden" name="inv_id"
+        <% if(locals.inv_id) { %> value="<%= locals.inv_id %>"
+        <% } %>>
     <div class="form-account-button">
-      <button type="submit">Add Inventory</button>
+      <button type="submit">Update Vehicle</button>
     </div>
+    
   </fieldset>
 </form>

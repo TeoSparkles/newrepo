@@ -13,7 +13,7 @@ const regValidate = require("../utilities/inventory-validation");
 router.get("/type/:classificationId", invController.buildByClassificationId);
 
 // Route to build inventory by inventory view
-router.get("/detail/:invId", invController.buildByInventoryId);
+router.get("/detail/:inv_id", invController.buildByInventoryId);
 
 // router.get("./inv", invController.buildManagement)
 router.get("/", invController.buildManagement);
@@ -47,5 +47,41 @@ router.post(
   regValidate.checkInventoryData, //W7 The inventory data will validate the rules in the inventory-validation.
   utilities.handleErrors(invController.registerInventory) //This is directly to the invController.
 );
+
+/******************* W9 Adding, Modify, and Deleting Viewing Route ***************************** */
+// W9 Add a new route that works with the URL in the JS file.
+router.get(
+  "/getInventory/:classification_id",
+  utilities.handleErrors(invController.getInventoryJSON)
+);
+
+//W9 Add a new route controlled by edit inventory view
+router.get(
+  "/edit/:inv_id",
+  utilities.handleErrors(invController.editInventoryView)
+);
+
+// A new route with comment to handle the incoming request.
+router.post(
+  "/update/",
+  regValidate.inventoryRules(),
+  regValidate.checkUpdateData,
+  utilities.handleErrors(invController.updateInventory)
+);
+
+//W9 Add a new route controlled by delete inventory view
+router.get(
+  "/delete/:inv_id",
+  utilities.handleErrors(invController.deleteInventoryView)
+);
+
+// A new route to handle the incoming request of a delete inventory view.
+router.post(
+  "/delete/",
+  utilities.handleErrors(invController.deleteItem)
+  // regValidate.inventoryRules(),
+  // regValidate.checkDeleteData,
+);
+
 
 module.exports = router;

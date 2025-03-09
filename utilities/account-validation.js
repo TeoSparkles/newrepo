@@ -77,4 +77,59 @@ validate.checkRegData = async (req, res, next) => {
   next();
 };
 
+/*  **********************************
+ *  W9 Login Data Validation Rules
+ * ********************************* */
+validate.loginRules = () => {
+  return [
+    // valid email is required and cannot already exist in the DB
+    body("account_email")
+      .trim()
+      .isEmail()
+      .normalizeEmail() // refer to validator.js docs
+      .withMessage("A valid email is required.")
+      .custom(async (account_email) => {
+        const emailExists = await accountModel.checkExistingEmail(
+          account_email
+        );
+        if (!emailExists) {
+          throw new Error(
+            "Log in to your email address."
+          );
+        }
+      }),
+    // password is required and must be strong password
+    body("account_password")
+      .trim()
+      .isStrongPassword({
+        minLength: 12,
+        minLowercase: 1,
+        minUppercase: 1,
+        minNumbers: 1,
+        minSymbols: 1,
+      })
+      .withMessage("Password does not meet requirements."),
+  ];
+};
+
+/* *********************************************************
+ * W9 Check data and return errors or continue to registration*
+ * *********************************************************/
+validate.checkLoginData = async (req, res, next) => {
+  const { account_email } = req.body;
+  let errors = [];
+  errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    let nav = await utilities.getNav();
+    res.render("account/login", {
+      errors,
+      title: "Login",
+      nav,
+      account_email,
+    });
+    return;
+  }
+  next();
+};
+
 module.exports = validate;

@@ -18,7 +18,7 @@ const session = require("express-session"); //This is Unit 4/W6 Session
 const pool = require("./database"); //This is Unit 4/W6 Session
 const accountRoute = require("./routes/accountRoute"); //This is Unit 4/W6 Session
 const bodyParser = require("body-parser");
-
+const cookieParser = require("cookie-parser");
 /* **************************
  * View Engine and Templates*
  ****************************/
@@ -54,6 +54,12 @@ app.use(function (req, res, next) {
 // W6 Process registration activity
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true })); // for parsing application/x-www-form-urlencoded
+
+// W9 cookie parser
+app.use(cookieParser());
+
+// W9 Check JWT Token
+app.use(utilities.checkJWTToken)
 
 /* ***********************
  * Routes                *
