@@ -35,11 +35,16 @@ async function buildRegister(req, res, next) {
  * *************************************** */
 async function accountManagement(req, res, next) {
   // req.flash("notice", "This is a flash message.")
+  // const account_email = parseInt(req.params.account_id);
   let nav = await utilities.getNav();
+  const { account_email, account_firstname } = req.body;
+  const accountData = await accountModel.getAccountByEmail(account_email);
+  // const itemName = `${accountData.account_firstname}`;
   res.render("./account/account", {
-    title: "Account Management",
+    title: "Welcome " + accountData.account_firstname,
     nav,
     errors: null,
+    account_email,
   });
 }
 

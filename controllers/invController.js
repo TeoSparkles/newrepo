@@ -41,13 +41,13 @@ invCont.buildByInventoryId = async function (req, res, next) {
 
 invCont.buildManagement = async function (req, res) {
   // It contains the build Management view.
-  const classificationSelect = await utilities.buildClassificationList();
+  const classificationList = await utilities.buildClassificationList();
   const nav = await utilities.getNav();
   res.render("./inventory/management", {
     title: "Vehicle Management",
     nav,
     errors: null,
-    classificationSelect,
+    classificationList,
   });
 };
 
@@ -92,13 +92,13 @@ invCont.registerClassification = async function (req, res, next) {
 invCont.buildInventory = async function (req, res, next) {
   //This will connect to the add inventory route.
   let nav = await utilities.getNav();
-  const classificationSelect = await utilities.buildClassificationList();
+  const classificationList = await utilities.buildClassificationList();
   // const classification_id = req.query.classificationId;
   // const data = await invModel.getInventoryByClassificationId(classification_name)
   res.render("./inventory/add-inventory", {
     title: "Add New Inventory",
     nav,
-    classificationSelect,
+    classificationList,
     errors: null,
   });
 };
@@ -109,7 +109,7 @@ invCont.buildInventory = async function (req, res, next) {
 invCont.registerInventory = async function (req, res, next) {
   //Creates the process and registers the inventory.
   let nav = await utilities.getNav();
-  const classificationSelect = await utilities.buildClassificationList(); //Creates the classification List in the inventory-model
+  const classificationList = await utilities.buildClassificationList(); //Creates the classification List in the inventory-model
   const {
     classification_id,
     inv_make,
@@ -142,7 +142,7 @@ invCont.registerInventory = async function (req, res, next) {
     res.status(201).render("inventory/management", {
       title: "Management",
       nav,
-      classificationSelect,
+      classificationList,
       errors: null,
     });
   } else {
@@ -150,7 +150,7 @@ invCont.registerInventory = async function (req, res, next) {
     res.status(501).render("inventory/add-inventory", {
       title: "Add New Inventory",
       nav,
-      classificationSelect,
+      classificationList,
     });
   }
 };
@@ -177,14 +177,14 @@ invCont.editInventoryView = async function (req, res, next) {
   const inv_id = parseInt(req.params.inv_id);
   let nav = await utilities.getNav();
   const itemData = await invModel.getInventoryById(inv_id);
-  const classificationSelect = await utilities.buildClassificationList(
+  const classificationList = await utilities.buildClassificationList(
     itemData.classification_id
   );
   const itemName = `${itemData.inv_make} ${itemData.inv_model}`;
   res.render("./inventory/edit-inventory", {
     title: "Edit " + itemName,
     nav,
-    classificationSelect: classificationSelect,
+    classificationList: classificationList,
     errors: null,
     inv_id: itemData.inv_id,
     inv_make: itemData.inv_make,
@@ -205,6 +205,7 @@ invCont.editInventoryView = async function (req, res, next) {
  * ************************** */
 invCont.updateInventory = async function (req, res, next) {
   let nav = await utilities.getNav();
+  // const classificationList = await utilities.buildClassificationList();
   const {
     inv_id,
     inv_make,
@@ -237,7 +238,7 @@ invCont.updateInventory = async function (req, res, next) {
     req.flash("notice", `The ${itemName} was successfully updated.`);
     res.redirect("/inv/");
   } else {
-    const classificationSelect = await utilities.buildClassificationList(
+    const classificationList = await utilities.buildClassificationList(
       classification_id
     );
     const itemName = `${inv_make} ${inv_model}`;
@@ -245,7 +246,7 @@ invCont.updateInventory = async function (req, res, next) {
     res.status(501).render("inventory/edit-inventory", {
       title: "Edit " + itemName,
       nav,
-      classificationSelect: classificationSelect,
+      classificationList: classificationList,
       errors: null,
       inv_id,
       inv_make,
@@ -269,10 +270,10 @@ invCont.deleteInventoryView = async function (req, res, next) {
   const inv_id = parseInt(req.params.inv_id);
   let nav = await utilities.getNav();
   const itemData = await invModel.getInventoryById(inv_id);
-  // const classificationSelect = await utilities.buildClassificationList(itemData.classification_id)
+  // const classificationList = await utilities.buildClassificationList(itemData.classification_id)
   const itemName = `${itemData.inv_make} ${itemData.inv_model}`;
   res.render("./inventory/delete-confirm", {
-    title: "Edit " + itemName,
+    title: "Delete " + itemName,
     nav,
     errors: null,
     inv_id: itemData.inv_id,
@@ -300,7 +301,7 @@ invCont.deleteItem = async function (req, res, next) {
     // {
     // title: "Edit " + itemName,
     // nav,
-    // classificationSelect: classificationSelect,
+    // classificationList: classificationList,
     // errors: null,
     // inv_id,
     // inv_make,
