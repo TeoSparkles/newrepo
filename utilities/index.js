@@ -195,7 +195,7 @@ Util.checkAdminEmployee = (req, res, next) => {
     jwt.verify(
       req.cookies.jwt,
       process.env.ACCESS_TOKEN_SECRET,
-      function (err, decoded) {
+      function (decoded) {
         if (decoded.account_type === 'Employee' || decoded.account_type === 'Admin') {
           next()
         } else{
