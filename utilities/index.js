@@ -232,7 +232,7 @@ Util.checkUpdate = (req, res) => {
 
 //Task 6: Creates the client, employee, and admin to log out.
 Util.checkLogout = (req, res) => {
-  jwt.verify(req.cookies.jwt, process.env.ACCESS_TOKEN_SECRET)
+  // jwt.verify(req.cookies.jwt, process.env.ACCESS_TOKEN_SECRET)
   res.clearCookie('jwt');
   res.redirect('/');
 }
