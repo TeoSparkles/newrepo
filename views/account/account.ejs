@@ -1,4 +1,32 @@
 <div id="messages">
     <%- messages() %>
   </div>
+
+  <div id="messages">
+    <% if (errors) { %>
+    <ul class="notice">
+      <% errors.array().forEach(error => { %>
+      <li><%= error.msg %></li>
+      <% }) %>
+    </ul>
+    <% } %>
+  </div>
+
+<!-- Assignment 5 -->
+  <!-- Task 3: Add functionality to the account management view. -->
   <h1><%= title %></h1>
+  <h2>Welcome <%- accountData.account_firstname %></h2>
+  <!-- This will allow the jwt tokens already been stored in the cookies. -->
+  <% if (accountData.account_type === 'Client'){ %>
+    <div class="button-management">
+      <h3><a href="/account/update/<%=accountData.account_id%>"> Update Account</a></h3>
+    </div>
+    <% } %>
+  <% if (accountData.account_type === 'Employee' || accountData.account_type === 'Admin' ){ %>
+    <div class="button-management">
+      <h3><a href="/account/update/<%=accountData.account_id%>"> Update Account</a></h3>
+    </div>
+    <div class="button-management">
+    <h3><a href="/inv">Edit Inventory Management</a></h3>
+  </div>
+  <% } %>

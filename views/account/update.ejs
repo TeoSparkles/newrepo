@@ -1,0 +1,85 @@
+<h1><%- title %></h1>
+
+<div id="messages">
+  <% if (errors) { %>
+  <ul class="notice">
+    <% errors.array().forEach(error => { %>
+    <li><%= error.msg %></li>
+    <% }) %>
+  </ul>
+  <% } %>
+</div>
+<!-- Assignment 5 -->
+<!-- Create a view where clients, employees, and admins can update their account data. -->
+<form action="/account/update" method="post" class="form-account">
+    <fieldset>
+      <div class="form-account-content">
+        <label for="firstname">First name:</label><br />
+        <input
+          type="text"
+          name="account_firstname"
+          id="firstname"
+          minlength="1"
+          required
+          value="<%= accountData.account_firstname %>"
+        />
+      </div>
+  
+      <div class="form-account-content">
+        <label for="lastname">Last name:</label><br />
+        <input
+          type="text"
+          name="account_lastname"
+          id="lastname"
+          minlength="2"
+          required
+          value="<%= accountData.account_lastname %>"
+        />
+      </div>
+  
+      <div class="form-account-content">
+        <label for="email">Email:</label><br />
+        <input
+          type="email"
+          name="account_email"
+          id="email"
+          required
+          placeholder="Enter a valid address"
+          value="<%= accountData.account_email %>"
+        />
+      </div>
+    <input type="hidden" name="account_id"
+      <% if(accountData.account_id) { %> value="<%= accountData.account_id %>"
+      <% } %>>
+    <div class="form-account-button">
+        <button type="submit">Update Account</button>
+      </div>
+    </fieldset>
+  </form>
+
+
+<!-- Here is the form the password can edit, but not in the values. -->
+    <form action="/account/change-password" method="post" class="form-account">
+      <fieldset>
+        <div class="form-account-content">
+          <label for="accountPassword">Password:</label><br />
+    
+          <input
+            type="password"
+            name="account_password"
+            id="accountPassword"
+            required
+            pattern="^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[^a-zA-Z0-9])(?!.*\s).{12,}$"
+          />
+          <span>Passwords must be at least 12 characters and contain at least 1 number,
+            1 capital letter and 1 special character</span>
+        </div>
+        <input type="hidden" name="account_id"
+        <% if(accountData.account_id) { %> value="<%= accountData.account_id %>"
+        <% } %>>
+        <%# ^(?=.\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[^a-zA-Z0-9])(?!.*\s){12,}$ %>
+        <div class="form-account-button">
+          <button type="submit">Update Password</button>
+        </div>
+      </fieldset>
+    </form>

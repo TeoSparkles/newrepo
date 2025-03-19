@@ -9,7 +9,7 @@
   <% } %>
 </div>
 
-<form action="/inv/update" method="post" class="form-account">
+<form action="/inv/update" method="post" id=updateForm class="form-account">
   <fieldset>
     <div class="form-account-content">
       <label for="classificationList">Classification Name:</label><br />
@@ -44,6 +44,7 @@
         name="inv_description"
         id="inventoryDescription"
       >
+      <%= locals.inv_description %>
       </textarea>
     </div>
 
@@ -116,8 +117,9 @@
         <% if(locals.inv_id) { %> value="<%= locals.inv_id %>"
         <% } %>>
     <div class="form-account-button">
-      <button type="submit">Update Vehicle</button>
+      <button type="submit" disabled>Update Vehicle</button>
     </div>
     
   </fieldset>
 </form>
+<script src="/js/inv_update.js"></script>

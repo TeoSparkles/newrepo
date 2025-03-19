@@ -16,7 +16,7 @@ router.get("/type/:classificationId", invController.buildByClassificationId);
 router.get("/detail/:inv_id", invController.buildByInventoryId);
 
 // router.get("./inv", invController.buildManagement)
-router.get("/", invController.buildManagement);
+router.get("/", utilities.checkAdminEmployee, invController.buildManagement);
 
 /*********************Add Classification view and post*********************/
 /* W7 Delivers Add Classification view to the controller View */

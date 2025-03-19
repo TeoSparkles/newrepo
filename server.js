@@ -79,8 +79,6 @@ app.use(errorRoute); //Using the errorRoute for the errorRoute
 //Account routes
 app.use("/account", accountRoute);
 
-// Management route.
-
 // File Not Found Route - must be last route in list
 app.use(async (req, res, next) => {
   next({
@@ -89,6 +87,10 @@ app.use(async (req, res, next) => {
   });
 });
 
+// app.use('/logout', (req, res) => {
+//   res.clearCookie('token');
+//   res.redirect('/');
+// })
 /* *********************************
  * Express Error Handler           *
  * Place after all other middleware*

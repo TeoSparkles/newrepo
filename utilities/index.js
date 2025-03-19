@@ -138,6 +138,9 @@ Util.buildClassificationList = async function (classification_id = null) {
   return classificationList;
 };
 
+
+
+
 /* ****************************************
  * W9 Middleware to check token validity
  **************************************** */
@@ -174,7 +177,67 @@ Util.checkLogin = (req, res, next) => {
   }
 };
 
+// Util.checkManage = (req, res, next) => {
+//   if (res.locals.loggedin) {
+//     next()
+//   } else {
+//     req.flash("notice", "Please log in.");
+//     return res.redirect("/account/login");
+//   }
+// };
 
+//Assignment 5
+// Task 2: In the middleware, using the JWT token and checks the account type 
+// and only allows access to any administrative and employee views or processes 
+// that will add/edit/delete items of classifications and vehicles.
+Util.checkAdminEmployee = (req, res, next) => {
+  if (req.cookies.jwt) {
+    jwt.verify(
+      req.cookies.jwt,
+      process.env.ACCESS_TOKEN_SECRET,
+      function (err, decoded) {
+        if (decoded.account_type === 'Employee' || decoded.account_type === 'Admin') {
+          next()
+        } else{
+          req.flash('notice', "You cannot access to this session.")
+          res.clearCookie('jwt')
+          return res.redirect("account/login")
+        }        
+      },
+    );
+    //Take note that if the employee or an admin can access 
+    // the inventory management, the process continues. 
+    // Else, the client won't access and return to the login process.
+    // If there is a guest tries to access the inventory management, the login process will redirect.
+  } else{
+    req.flash('notice', 'Please log in.')
+    res.redirect('account/login')
+  }
+};
+
+//Assignment 5
+//Task 5: Creates the client, employee, and admin to update the account
+Util.checkUpdate = (req, res) => {
+  jwt.verify(req.cookies.jwt, process.env.ACCESS_TOKEN_SECRET, 
+    // function (err, decoded) {
+      //   if (decoded.account_type === 'Employee' || decoded.account_type === 'Admin') {
+      //     next()
+      //   } else{
+      //     req.flash('notice', "You cannot access to this session.")
+      //     res.clearCookie('jwt')
+      //     return res.redirect("account/login")
+      //   }        
+      // })
+)}
+
+//Task 6: Creates the client, employee, and admin to log out.
+Util.checkLogout = (req, res) => {
+  jwt.verify(req.cookies.jwt, process.env.ACCESS_TOKEN_SECRET)
+  res.clearCookie('jwt');
+  res.redirect('/');
+}
+
+// var token = jwt.sign({account_firstname: 'admin'})
 module.exports = Util;
 
 /* ****************************************
