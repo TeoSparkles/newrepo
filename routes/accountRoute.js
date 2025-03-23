@@ -58,7 +58,7 @@ router.get(
 router.post(
   "/update",
   regValidate.updateDataRules(),
-  regValidate.checkUpdateData,
+  // utilities.checkUpdate,
   utilities.handleErrors(accountController.updateAccount)
 );
 //The password data process the data in the account controller.

@@ -45,6 +45,20 @@ async function getInventoryByInventoryId(inv_id) {
   }
 }
 
+/* ********************************
+ *  Get all the customer reviews*
+ * ****************************** */
+async function getReviewById(inv_id) {
+  try {
+    const data = await pool.query(
+      'SELECT * FROM review WHERE review_id = $1',
+      [review_id]
+    );
+    return data.rows;
+  } catch (error) {
+    console.error("getclassificationsbyid error " + error);
+  }
+}
 /******************************************************************************************************************* */
 // /* ******************************
 //  *   Register new classification*

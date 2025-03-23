@@ -111,6 +111,9 @@ Util.buildInventoryGrid = async function (data) {
 
       grid += "<li><b>Color </b>: " + vehicle.inv_color + "</li></ul></div>";
       // grid += '</div>';
+      grid += "<h2>Customer Reviews</h2>"
+      grid += "<div class='FirstReview'><p>Be the first to write a review.</p></div>";
+      grid += "<p>You must <a href='/account/login'>log in</a> to review.</p>";
     });
   } else {
     grid += '<p class="notice">Sorry, no matching vehicles could be found.</p>';
@@ -177,32 +180,46 @@ Util.checkLogin = (req, res, next) => {
   }
 };
 
-// Util.checkManage = (req, res, next) => {
-//   if (res.locals.loggedin) {
-//     next()
-//   } else {
-//     req.flash("notice", "Please log in.");
-//     return res.redirect("/account/login");
-//   }
-// };
-
 //Assignment 5
 // Task 2: In the middleware, using the JWT token and checks the account type 
 // and only allows access to any administrative and employee views or processes 
 // that will add/edit/delete items of classifications and vehicles.
+// Util.checkAdminEmployee = (req, res, next) => {
+//   if (req.cookies.jwt) {
+//     jwt.verify(
+//       req.cookies.jwt,
+//       process.env.ACCESS_TOKEN_SECRET,
+//       function (err, decoded) {
+//         // Check for errors during JWT verification or if decoded is null
+//         if (err || !decoded) {
+//           return res.status(401).json({ message: 'Unauthorized' });
+//         }
+
+//         // Now safely check account_type
+//         if (decoded.account_type === 'Employee' || decoded.account_type === 'Admin') {
+//           next();
+//         } else {
+//           return res.status(403).json({ message: 'Forbidden' });
+//         }
+//       },
+//     );
+//   } else {
+//     return res.status(401).json({ message: 'No token provided' });
+//   }
+// };
 Util.checkAdminEmployee = (req, res, next) => {
   if (req.cookies.jwt) {
     jwt.verify(
       req.cookies.jwt,
       process.env.ACCESS_TOKEN_SECRET,
-      function (decoded) {
+      function (err, decoded) {
         if (decoded.account_type === 'Employee' || decoded.account_type === 'Admin') {
           next()
         } else{
           req.flash('notice', "You cannot access to this session.")
-          res.clearCookie('jwt')
+          // res.clearCookie('jwt')
           return res.redirect("account/login")
-        }        
+        }
       },
     );
     //Take note that if the employee or an admin can access 
@@ -217,18 +234,10 @@ Util.checkAdminEmployee = (req, res, next) => {
 
 //Assignment 5
 //Task 5: Creates the client, employee, and admin to update the account
-Util.checkUpdate = (req, res) => {
-  jwt.verify(req.cookies.jwt, process.env.ACCESS_TOKEN_SECRET, 
-    // function (err, decoded) {
-      //   if (decoded.account_type === 'Employee' || decoded.account_type === 'Admin') {
-      //     next()
-      //   } else{
-      //     req.flash('notice', "You cannot access to this session.")
-      //     res.clearCookie('jwt')
-      //     return res.redirect("account/login")
-      //   }        
-      // })
-)}
+Util.checkUpdate = (req, res, next) => {
+  res.clearCookie('jwt');
+  next()
+}
 
 //Task 6: Creates the client, employee, and admin to log out.
 Util.checkLogout = (req, res) => {
@@ -236,6 +245,27 @@ Util.checkLogout = (req, res) => {
   res.clearCookie('jwt');
   res.redirect('/');
 }
+
+/* **************************************
+ * ******Build the review details in inventory view HTML*****
+ * *************************************/
+// Util.buildReviewGrid = async function (data) {
+//   let reGrid;
+//   if (data.length > 0) {
+//     // grid = '<div class="inv-detail">';
+//     data.forEach((review) => {
+//       reGrid += "<ul class= inv-description>";
+//       reGrid +=
+//       reGrid += "<li><b>Color </b>: " + vehicle.inv_color + "</li></ul></div>";
+//       // grid += '</div>';
+//     });
+//   } else {
+//     grid += '<p class="notice">Sorry, no matching vehicles could be found.</p>';
+//   }
+
+//   return grid;
+// };
+
 
 // var token = jwt.sign({account_firstname: 'admin'})
 module.exports = Util;
