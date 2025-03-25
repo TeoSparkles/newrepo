@@ -1,0 +1,47 @@
+// /* **************************************
+//  * ******Build the details view HTML*****
+//  * *************************************/
+// Util.buildInventoryGrid = async function (data) {
+//   let grid;
+//   if (data.length > 0) {
+//     grid = '<div class="inv-detail">';
+//     data.forEach((vehicle) => {
+//       grid +=
+//         '<img src="' +
+//         vehicle.inv_image +
+//         '" alt="Image of ' +
+//         vehicle.inv_make +
+//         " " +
+//         vehicle.inv_model +
+//         ' on CSE Motors">';
+//       // grid += '<div >'
+//       grid += "<ul class= inv-description>";
+//       grid += "<li><h2>Details</h2></li>";
+//       grid += "<li><b>Description: </b>" + vehicle.inv_description + "</li>";
+//       grid +=
+//         "<li><b>Price: </b>" +
+//         "<span>$" +
+//         new Intl.NumberFormat("en-US").format(vehicle.inv_price) +
+//         "</span></li>";
+//       grid +=
+//         "<li><b> Mileage </b>: " +
+//         Intl.NumberFormat("en-US").format(vehicle.inv_miles) +
+//         "</li>";
+
+//       grid += "<li><b>Color </b>: " + vehicle.inv_color + "</li></ul></div>";
+//       // grid += '</div>';
+//       grid += "<h2>Customer Reviews</h2>"
+//       // grid += {classificationList}
+//       grid += "<table id='inventoryDisplay'></table>"
+//       grid += "<div class='FirstReview'><p>Be the first to write a review.</p></div>";
+//       grid += '<p>This is a sample</p>'
+//       grid += "<p>You must <a href='/account/login'>log in</a> to review.</p>";
+
+//       // }
+//     });
+//   } else {
+//     grid += '<p class="notice">Sorry, no matching vehicles could be found.</p>';
+//   }
+
+//   return grid;
+// };
