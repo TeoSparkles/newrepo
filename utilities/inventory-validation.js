@@ -239,4 +239,56 @@ validate.checkUpdateData = async (req, res, next) => {
   }
   next();
 };
+
+
+validate.reviewRules = () => {
+  return [
+    //Creates the classification ID that encounters the classification name of the list
+    body("screenName")
+      .trim()
+      .escape()
+      .isLength({ min: 1 })
+      .withMessage("Please provide the screen name."),
+
+    body("review_text")
+      .trim()
+      .escape()
+      .isString()
+      .isLength({ min: 1 })
+      .withMessage("Please comment the review."),
+  ];
+};
+
+/* ***************************************************************
+ * Check data and return errors or continue to add classification*
+ * ***************************************************************/
+validate.checkReviewData = async (req, res, next) => {
+  const {
+    review_text,
+    review_date,
+    account_id,
+    inv_id,
+  } = req.body;
+
+  //Create a list of validation errors in a set of inventory rules.
+  let errors = [];
+  errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    let nav = await utilities.getNav();
+    // const classificationList = await utilities.buildClassificationList();
+    res.render("inventory/classification", {
+      errors,
+      title: "Inventory Details",
+      nav,
+      review_text,
+      review_date,
+      account_id,
+      inv_id,
+    });
+    return;
+  }
+  next();
+};
+
+
 module.exports = validate;

@@ -28,5 +28,15 @@
     </div>
     <div class="button-management">
     <h3><a href="/inv">Edit Inventory Management</a></h3>
-  </div>
+  </div>  
   <% } %>
+
+  <h2>My Reviews</h2>
+  <% if (locals.review_id){ %>
+    <p>There are no reviews to display</p>
+  <% } else { %>
+    <p>Testing here</p>
+    <table id="reviewDisplay"></table>    
+  <noscript>Javascript must be enabled to use this page</noscript>
+  <script src="../../js/review.js"></script>
+<%} %>

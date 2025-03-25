@@ -44,21 +44,6 @@ async function getInventoryByInventoryId(inv_id) {
     console.error("getclassificationsbyid error " + error);
   }
 }
-
-/* ********************************
- *  Get all the customer reviews*
- * ****************************** */
-async function getReviewById(inv_id) {
-  try {
-    const data = await pool.query(
-      'SELECT * FROM review WHERE review_id = $1',
-      [review_id]
-    );
-    return data.rows;
-  } catch (error) {
-    console.error("getclassificationsbyid error " + error);
-  }
-}
 /******************************************************************************************************************* */
 // /* ******************************
 //  *   Register new classification*
@@ -182,6 +167,44 @@ async function deleteInventoryItem(inv_id) {
     new Error("Delete Inventory Error.");
   }
 }
+
+async function getReviewById(review_id) {
+  return await pool.query("SELECT * FROM public.review WHERE review_id = $1");
+}
+
+/* ********************************
+ *  W12 Use this to process the customer review*
+ * ****************************** */
+async function registerReview(
+  review_text, 
+  inv_id, 
+  account_id) {
+  try {
+    const sql = 
+      `INSERT INTO review (review_text, review_date, inv_id, account_id)
+      VALUES ($1, NOW(), $2, $3) RETURNING *`;
+    return await pool.query(sql, [
+      review_text, 
+      inv_id, 
+      account_id]);
+  } catch (error) {
+    return error.message;
+  }
+}
+async function getReviewIdByAccountId(account_id) {
+  try {
+    const data = await pool.query(
+      `SELECT * FROM public.review AS r
+      JOIN public.account AS a
+      ON a.account_id = r.account_id 
+      WHERE r.account_id = $1`,
+      [account_id]
+    )
+    return data.rows
+  } catch (error) {
+    return error.message;
+  }
+}
 module.exports = {
   getClassifications,
   getInventoryByClassificationId,
@@ -192,6 +215,9 @@ module.exports = {
   getInventoryById,
   updateInventory,
   deleteInventoryItem,
+  getReviewById,
+  registerReview,
+  getReviewIdByAccountId,
 };
 
 //Here is an optional tool for the existing list.

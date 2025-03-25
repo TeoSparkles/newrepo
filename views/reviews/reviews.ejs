@@ -1,0 +1,17 @@
+<!-- views/reviews.ejs (assuming you're using EJS templating) -->
+<h1>Submit a Review</h1>
+<form action="/reviews" method="POST">
+    <textarea name="review_text" placeholder="Write your review here" required></textarea>
+    <input type="number" name="inv_id" placeholder="Inventory ID" required />
+    <input type="number" name="account_id" placeholder="Your Account ID" required />
+    <button type="submit">Submit Review</button>
+</form>
+
+<h2>All Reviews</h2>
+<ul>
+    <% reviews.forEach(function(review) { %>
+        <li><strong>Review:</strong> <%= review.review_text %> <br/>
+            <strong>Date:</strong> <%= review.review_date %>
+        </li>
+    <% }); %>
+</ul>

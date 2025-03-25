@@ -83,5 +83,10 @@ router.post(
   // regValidate.checkDeleteData,
 );
 
+router.post("/detail/review",
+  utilities.handleErrors(invController.addReview),
+    regValidate.reviewRules(),
+    regValidate.checkReviewData,
+  );
 
 module.exports = router;

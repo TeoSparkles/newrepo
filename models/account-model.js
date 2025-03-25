@@ -59,8 +59,9 @@ async function getAccountById (account_id) {
       'SELECT * FROM public.account WHERE account_id = $1',
       [account_id])
     return result.rows[0];
+
   } catch (error) {
-    return new Error("No matching email found")
+    return new Error("No matching id found")
   }
 }
 
@@ -101,3 +102,30 @@ async function updatePassword(
   }
 }
 module.exports = { registerAccount, checkExistingEmail, getAccountByEmail, getAccountById, updateAccount, updatePassword };
+
+// /* *****************************
+// * Return account id using email address
+// * ***************************** */
+// async function getAccountByAccountId (account_id) {
+//     try {
+//       // Perform the query to find the account by ID
+//       const result = await pool.query(
+//         'SELECT * FROM public.account WHERE account_id = $1',
+//         [account_id]
+//       );
+  
+//       // Check if a row is returned
+//       if (result.rows.length === 0) {
+//         // If no account found, return null (or throw an error)
+//         return null;  // You could also throw an error here if you prefer
+//       }
+  
+//       // Return the first result row (there should only be one)
+//       return result.rows[0];
+      
+//     } catch (error) {
+//       // Log the error for debugging and return a message or null
+//       console.error('Error fetching account:', error);
+//       return null;  // Return null to indicate the error gracefully
+//     }
+//   }

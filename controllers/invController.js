@@ -1,5 +1,7 @@
 const { parse } = require("dotenv");
 const invModel = require("../models/inventory-model");
+const accountModel = require("../models/account-model");
+const reviewModel = require("../models/review-model");
 const utilities = require("../utilities");
 
 const invCont = {};
@@ -17,7 +19,7 @@ invCont.buildByClassificationId = async function (req, res, next) {
     title: className + " vehicles",
     nav,
     grid,
-    // errors: null
+    errors: null
   });
 };
 
@@ -26,8 +28,25 @@ invCont.buildByClassificationId = async function (req, res, next) {
  * ************************** */
 invCont.buildByInventoryId = async function (req, res, next) {
   const inv_id = req.params.inv_id;
+  const review_id = req.params.review_id;
+  const account_id = parseInt(req.params.account_id);
   const data = await invModel.getInventoryByInventoryId(inv_id);
-  const grid = await utilities.buildInventoryGrid(data);
+  const reviewData = await invModel.getReviewIdByAccountId(account_id);
+  if (!data || data.length === 0) {
+    return res
+      .status(404)
+      .render("error", { message: "Inventory item not found" });
+  }
+
+  const accountData = await accountModel.getAccountById(account_id);
+  if (!accountData) {
+    return res.status(404).render("error", { message: "Account not found" });
+  }
+  const grid = await utilities.buildInventoryGrid(data, reviewData, accountData);
+  
+  // Generate the screen name (first initial of the first name + full last name)
+  // const screenName = accountData.account_firstname.charAt(0) + accountData.account_lastname;
+
   let nav = await utilities.getNav();
   const brand = data[0].inv_make;
   const model = data[0].inv_model;
@@ -36,7 +55,57 @@ invCont.buildByInventoryId = async function (req, res, next) {
     title: year + " " + brand + " " + model,
     nav,
     grid,
+    // screenName,
+    errors: null,
+    // isLoggedIn,
+    // account_id: accountData.account_id || null,
+    // review_text,  // Ensure safe access to account_id
+    // reviewGrid,
   });
+};
+
+/* ***************************
+ *  Add reviews
+ * ************************** */
+invCont.addReview = async function (req, res, next) {
+  //Creates the process and registers the inventory.
+  const inv_id = req.params.inv_id;
+  const account_id = parseInt(req.params.account_id);
+  const data = await invModel.getInventoryByInventoryId(inv_id);
+  const grid = await utilities.buildInventoryGrid(data);
+  let nav = await utilities.getNav();
+  // const classificationList = await utilities.buildClassificationList(); //Creates the classification List in the inventory-model
+  const {
+    review_id,
+    review_text,
+    // inv_id,
+    // account_id,
+  } = req.body;
+
+  const regResult = await reviewModel.registerReview(
+    //This will register the inventory in the inventory-model
+    review_id,
+    review_text
+    // inv_id,
+    // account_id,
+  );
+  if (regResult) {
+    //If the inventory is added, then the inventory registers, if not, the inventory has a server error.
+    req.flash("notice", `Review Added`);
+    res.status(201).render("inventory/classification", {
+      title: "Inventory",
+      nav,
+      errors: null,
+      grid,
+    });
+  } else {
+    req.flash("notice", "Review failed.");
+    res.status(501).render("inventory/classification", {
+      title: "Inventory",
+      nav,
+      grid,
+    });
+  }
 };
 
 invCont.buildManagement = async function (req, res) {
@@ -309,6 +378,12 @@ invCont.deleteItem = async function (req, res, next) {
     // inv_year,
     // inv_price,
     // }
+// const grid = await utilities.buildInventoryGrid(data);
+  // const review_id = req.params.review_id;
+  // const reviews = await reviewModel.getReviewById(inv_id);
+  // const accountData = await accountModel.getAccountById(account_id);
+  // const isLoggedIn = accountData ? true : false;
+  // const reviewGrid = await utilities.buildReviewGrid(reviewData, accountData);
   }
 };
 module.exports = invCont;
