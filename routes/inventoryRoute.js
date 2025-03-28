@@ -13,7 +13,7 @@ const regValidate = require("../utilities/inventory-validation");
 router.get("/type/:classificationId", invController.buildByClassificationId);
 
 // Route to build inventory by inventory view
-router.get("/detail/:inv_id", invController.buildByInventoryId);
+router.get("/detail/:inv_id", utilities.handleErrors(invController.buildByInventoryId));
 
 // router.get("./inv", invController.buildManagement)
 router.get("/", utilities.checkAdminEmployee, invController.buildManagement);
@@ -79,14 +79,37 @@ router.get(
 router.post(
   "/delete/",
   utilities.handleErrors(invController.deleteItem)
-  // regValidate.inventoryRules(),
-  // regValidate.checkDeleteData,
 );
 
-router.post("/detail/review",
-  utilities.handleErrors(invController.addReview),
-    regValidate.reviewRules(),
-    regValidate.checkReviewData,
-  );
+//W12 Post Review
+router.post(
+  "/detail/:inv_id",
+  regValidate.reviewRules(), // Validation rules for review input
+  regValidate.checkReviewData, // Middleware to check validation results
+  utilities.handleErrors(invController.addReview) // Controller to handle adding the review
+);
+
+//W12 Edit Review
+router.get(
+  "/detail/edit/review/:review_id",
+  utilities.handleErrors(invController.editReviewView)
+);
+//W12 Edit Review
+router.post(
+  "/detail/edit/review",
+  regValidate.reviewRules(), // Validation rules for review input
+  regValidate.checkUpdateReviewData, // Middleware to check validation results
+  utilities.handleErrors(invController.editReview)
+);
+
+router.get(
+  "/detail/delete/:review_id",
+  utilities.handleErrors(invController.deleteReviewView)
+);
+
+router.post(
+  "/detail/delete/review",
+  utilities.handleErrors(invController.deleteReviewItem)
+);
 
 module.exports = router;

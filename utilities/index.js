@@ -112,21 +112,32 @@ Util.buildInventoryGrid = async function (data, reviewData, accountData) {
 
       //--------------------------------------- W12 Customer reviews section-----------------------------------------------//
       grid += "<h3>Customer Reviews</h3>";
-      // if (vehicle.reviews && vehicle.reviews.length > 0) {
-      //   vehicle.reviews.forEach((review) => {
-      //     grid += `<div class="review"><p><strong>${review.screenName}</strong>: ${review.text}</p></div>`;
-      //   });
-      // } else {
-      //   grid += "<div class='FirstReview'><p>Be the first to write a review.</p></div>";
-      // }
-    });
-    //W12 Create a form of the reviews
-    // if (accountData.length > 0) {
-    // accountData.forEach((account) => {
-    // grid += `Testing "${accountData.account_firstname}"`
+      if (reviewData.length > 0) {
+        reviewData.forEach((review) => {
+          grid += `<div class="review-item">`;
+          const formattedDate = new Intl.DateTimeFormat("en-US").format(new Date(review.review_date));
+          grid += `<p><strong>${review.account_firstname[0] + review.account_lastname} </strong><em>${formattedDate}</em></p>`;
+          grid += ``;
+          grid += `<p>${review.review_text}</p>`;
+          grid += `</div>`;
 
-    if (accountData) {
-      grid += `<form action='/inv/detail/review' method='post' class='form-account'>
+        });
+      } else {
+        grid +=
+          "<div class='FirstReview'><p>Be the first to write a review.</p></div>";
+      }
+    
+      // grid += `Testing "${accountData} "`
+      // grid += `Testing ${vehicle.inv_id} `
+      // grid += `Testing ${reviewData.inv_id}`
+      //W12 Create a form of the reviews
+      // if (accountData.length > 0) {
+      // accountData.forEach((account) => {
+
+      if (accountData) {
+        grid += `<form action='/inv/detail/${
+          vehicle.inv_id
+        }' method='post' class='form-account'>
   <fieldset>
     <div class="form-account-content">
       <label for="screenName">Screen Name:</label><br />
@@ -135,39 +146,48 @@ Util.buildInventoryGrid = async function (data, reviewData, accountData) {
         id="screenName"
         required
         minlength="3"
-        value="${accountData.screenName}"
+        value="${
+          accountData.account_firstname[0] + accountData.account_lastname
+        }"
       />
       </div>
       <div class="form-account-content">
       <label for="reviewText">Review text:</label><br />
-      <input
-        type="text"
-        name="review_text"
-        id="reviewText"
-        required
-        minlength="3"
-      />
-      </div>
-       <div class="form-account-button">
+       <textarea
+                name="review_text"
+                id="reviewText"
+                required
+                minlength="3"
+              >
+      </textarea>
+       <input type="hidden" name="account_id"`;
+        if (accountData.account_id) {
+          grid += `value= ${accountData.account_id}>`;
+        }
+
+        grid += `<input type="hidden" name="inv_id"`;
+        if (vehicle.inv_id) {
+          grid += `value= ${vehicle.inv_id}>`;
+        }
+        grid += `<br><div class="form-account-button">
       <button type="submit">Submit Review</button>
       </div>
       </fieldset>
     </form>
-
-`;
-    }
-    // } else
-    grid += "<p>You must <a href='/account/login'>log in</a> to review.</p>";
-  }
-
-  // )}}
-  else {
+    `;
+      } else {
+        grid +=
+          "<p>You must <a href='/account/login'>log in</a> to review.</p>";
+      }
+    });
+    // )}}
+  } else {
     grid += '<p class="notice">Sorry, no matching vehicles could be found.</p>';
   }
 
   return grid;
 };
-
+//Contains a classification list of the inventory.
 Util.buildClassificationList = async function (classification_id = null) {
   let data = await invModel.getClassifications();
   let classificationList =
@@ -293,26 +313,29 @@ Util.checkLogout = (req, res) => {
 };
 
 /* **************************************
- * ******Build the review details in inventory view HTML*****
+ * ******Build the review details in account management view*****
  * *************************************/
-// Util.buildReviewGrid = async function (data) {
-//   let reGrid;
-//   if (data.length > 0) {
-//     // grid = '<div class="inv-detail">';
-//     data.forEach((review) => {
-//       reGrid += "<ul class= inv-description>";
-//       reGrid +=
-//       reGrid += "<li><b>Color </b>: " + vehicle.inv_color + "</li></ul></div>";
-//       // grid += '</div>';
-//     });
-//   } else {
-//     grid += '<p class="notice">Sorry, no matching vehicles could be found.</p>';
-//   }
+Util.buildReviewList = async function (data) {
+  let list = ""; // Initialize grid variable to ensure it's always returned
 
-//   return grid;
-// };
+  if (data.length > 0) {
+    data.forEach((review) => {
+      // list += '<div class="review-item">';
+      list += `<p><strong>Reviewed the ${review.inv_year} ${review.inv_make} ${review.inv_model}</strong></p>`;
+      list += `<p><em>On ${new Intl.DateTimeFormat("en-US").format(new Date(review.review_date))}</em></p>`;
+      list += `<p>${review.review_text}</p>`;
+      list += `<div class="review-actions">`;
+      list += `<a href="/inv/detail/edit/review/${review.review_id}" class="edit-link">Edit</a> `;
+      list += `<a href="/inv/detail/delete/${review.review_id}" class="delete-link">Delete</a> `;
+      // list += `</div>`;
+      list += "</div>";
+    });
+  } else {
+    list += '<p class="notice">Sorry, no matching reviews found.</p>';
+  }
 
-// var token = jwt.sign({account_firstname: 'admin'})
+  return list;
+};
 module.exports = Util;
 
 /* ****************************************

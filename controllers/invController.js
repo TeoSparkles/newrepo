@@ -19,7 +19,7 @@ invCont.buildByClassificationId = async function (req, res, next) {
     title: className + " vehicles",
     nav,
     grid,
-    errors: null
+    errors: null,
   });
 };
 
@@ -27,84 +27,76 @@ invCont.buildByClassificationId = async function (req, res, next) {
  *  Build inventory by details view
  * ************************** */
 invCont.buildByInventoryId = async function (req, res, next) {
-  const inv_id = req.params.inv_id;
-  const review_id = req.params.review_id;
-  const account_id = parseInt(req.params.account_id);
-  const data = await invModel.getInventoryByInventoryId(inv_id);
-  const reviewData = await invModel.getReviewIdByAccountId(account_id);
-  if (!data || data.length === 0) {
-    return res
-      .status(404)
-      .render("error", { message: "Inventory item not found" });
-  }
+  try {
+    const inv_id = req.params.inv_id;
+    const data = await invModel.getInventoryByInventoryId(inv_id);
 
-  const accountData = await accountModel.getAccountById(account_id);
-  if (!accountData) {
-    return res.status(404).render("error", { message: "Account not found" });
-  }
-  const grid = await utilities.buildInventoryGrid(data, reviewData, accountData);
-  
-  // Generate the screen name (first initial of the first name + full last name)
-  // const screenName = accountData.account_firstname.charAt(0) + accountData.account_lastname;
+    if (!data || data.length === 0) {
+      throw new Error("Inventory not found");
+    }
 
-  let nav = await utilities.getNav();
-  const brand = data[0].inv_make;
-  const model = data[0].inv_model;
-  const year = data[0].inv_year;
-  res.render("./inventory/classification", {
-    title: year + " " + brand + " " + model,
-    nav,
-    grid,
-    // screenName,
-    errors: null,
-    // isLoggedIn,
-    // account_id: accountData.account_id || null,
-    // review_text,  // Ensure safe access to account_id
-    // reviewGrid,
-  });
+    const accountData = res.locals.accountData;
+    const reviewData = await invModel.getReviewByInventoryId(inv_id); // Added 'await' and used inv_id directly
+    const grid = await utilities.buildInventoryGrid(data, reviewData, accountData);
+    const nav = await utilities.getNav();
+    const brand = data[0].inv_make;
+    const model = data[0].inv_model;
+    const year = data[0].inv_year;
+
+    res.render("./inventory/classification", {
+      title: `${year} ${brand} ${model}`,
+      nav,
+      grid,
+      errors: null,
+    });
+  } catch (error) {
+    console.error("Error building inventory by ID:", error.message);
+    next(error); // Pass the error to the next middleware
+  }
 };
 
 /* ***************************
  *  Add reviews
  * ************************** */
 invCont.addReview = async function (req, res, next) {
-  //Creates the process and registers the inventory.
-  const inv_id = req.params.inv_id;
-  const account_id = parseInt(req.params.account_id);
-  const data = await invModel.getInventoryByInventoryId(inv_id);
-  const grid = await utilities.buildInventoryGrid(data);
-  let nav = await utilities.getNav();
-  // const classificationList = await utilities.buildClassificationList(); //Creates the classification List in the inventory-model
-  const {
-    review_id,
-    review_text,
-    // inv_id,
-    // account_id,
-  } = req.body;
+  // Creates the process and registers the inventory.
+  const { review_text, inv_id, account_id } = req.body;
 
-  const regResult = await reviewModel.registerReview(
-    //This will register the inventory in the inventory-model
-    review_id,
-    review_text
-    // inv_id,
-    // account_id,
-  );
+  const regResult = await invModel.registerReview(review_text, inv_id, account_id);
   if (regResult) {
-    //If the inventory is added, then the inventory registers, if not, the inventory has a server error.
+    let nav = await utilities.getNav();
+    const inv_id = req.params.inv_id;
+    const review_id = req.params.inv_id;
+    // const account_id = parseInt(req.params.account_id);
+    const data = await invModel.getInventoryByInventoryId(inv_id);
+    const reviewData = await invModel.getReviewByInventoryId(review_id); // Fixed: Added 'await' here
+    const accountData = res.locals.accountData;
+    const grid = await utilities.buildInventoryGrid(
+      data,
+      reviewData,
+      accountData
+    );
+    const brand = data[0].inv_make;
+    const model = data[0].inv_model;
+    const year = data[0].inv_year;
+    // If the inventory is added, then the inventory registers, if not, the inventory has a server error.
     req.flash("notice", `Review Added`);
-    res.status(201).render("inventory/classification", {
-      title: "Inventory",
-      nav,
-      errors: null,
-      grid,
-    });
+    res.redirect(`/inv/detail/${inv_id}`);
+    // req.flash("notice", `Review Added`);
+    // res.render("./inventory/classification", {
+    //   title: year + " " + brand + " " + model,
+    //   nav,
+    //   errors: null,
+    //   grid,
+    // });
   } else {
-    req.flash("notice", "Review failed.");
-    res.status(501).render("inventory/classification", {
-      title: "Inventory",
-      nav,
-      grid,
-    });
+    req.flash("notice", "Review Failed.");
+    res.redirect(`/inv/detail/${inv_id}`);
+    // res.status(501).render("inventory/classification", {
+    //   title: "Inventory",
+    //   nav,
+    //   grid: null, // Fixed: Ensure 'grid' is defined even in failure cases
+    // });
   }
 };
 
@@ -336,8 +328,8 @@ invCont.updateInventory = async function (req, res, next) {
  *  W9 Delete Inventory View
  * ************************** */
 invCont.deleteInventoryView = async function (req, res, next) {
-  const inv_id = parseInt(req.params.inv_id);
   let nav = await utilities.getNav();
+  const inv_id = parseInt(req.params.inv_id);
   const itemData = await invModel.getInventoryById(inv_id);
   // const classificationList = await utilities.buildClassificationList(itemData.classification_id)
   const itemName = `${itemData.inv_make} ${itemData.inv_model}`;
@@ -354,7 +346,7 @@ invCont.deleteInventoryView = async function (req, res, next) {
 };
 
 /* ***************************
- *  Delete Inventory Item
+ *  Delete Inventory Item Process
  * ************************** */
 invCont.deleteItem = async function (req, res, next) {
   const inv_id = parseInt(req.body.inv_id);
@@ -367,23 +359,103 @@ invCont.deleteItem = async function (req, res, next) {
   } else {
     req.flash("notice", "Sorry, the deletion failed."); //If not, the deletion fails.
     res.redirect("/inv/delete/inv_id");
-    // {
-    // title: "Edit " + itemName,
-    // nav,
-    // classificationList: classificationList,
-    // errors: null,
-    // inv_id,
-    // inv_make,
-    // inv_model,
-    // inv_year,
-    // inv_price,
-    // }
-// const grid = await utilities.buildInventoryGrid(data);
-  // const review_id = req.params.review_id;
-  // const reviews = await reviewModel.getReviewById(inv_id);
-  // const accountData = await accountModel.getAccountById(account_id);
-  // const isLoggedIn = accountData ? true : false;
-  // const reviewGrid = await utilities.buildReviewGrid(reviewData, accountData);
+  }
+};
+
+//W12 Edit review controller
+invCont.editReviewView = async function (req, res, next) {
+  try {
+    const review_id = parseInt(req.params.review_id);
+    const reviewData = await reviewModel.getReviewById(review_id);
+
+    if (!reviewData) {
+      throw new Error("Review not found");
+    }
+
+    const brand = reviewData.inv_make;
+    const model = reviewData.inv_model;
+    const year = reviewData.inv_year;
+    let nav = await utilities.getNav();
+
+    res.render("./inventory/edit-review", {
+      errors: null,
+      title: "Edit " + year + " " + brand + " " + model + " Review",
+      nav,
+      review_text: reviewData.review_text,
+      inv_id: reviewData.inv_id,
+      account_id: reviewData.account_id,
+      review_id: reviewData.review_id,
+    });
+  } catch (error) {
+    console.error("Error loading review for editing:", error.message);
+    next(error); // Pass the error to the next middleware
+  }
+};
+/* ***************************
+ *  Process edit reviews
+ * ************************** */
+invCont.editReview = async function (req, res, next) {
+  // invCont.updateInventory = async function (req, res, next) {
+    let nav = await utilities.getNav();
+    const {
+      review_id,
+      review_text,
+      review_date,
+    
+    } = req.body;
+    const reviewResult = await reviewModel.updateReview(
+      review_id,
+      review_text,
+      review_date,
+    );
+  
+    if (reviewResult) {
+      const itemName = reviewResult.review_text;
+      req.flash("notice", `The ${itemName} was successfully updated.`);
+      res.redirect("/account/");
+    } else {
+      req.flash("notice", "Review failed.");
+      res.redirect("/account/");
+    }
+  };
+
+
+
+/* ***************************
+ *  W12 Delete Review View
+ * ************************** */
+invCont.deleteReviewView = async function (req, res, next) {
+  let nav = await utilities.getNav();
+  const review_id = parseInt(req.params.review_id);
+  const reviewData = await reviewModel.getReviewById(review_id);
+  // const itemData = await invModel.getReviewById(review_id);
+  // const classificationList = await utilities.buildClassificationList(itemData.classification_id)
+  const reviewName = `Delete ${reviewData.inv_make} ${reviewData.inv_model} Review?`;
+  res.render("./inventory/delete-review", {
+    title: reviewName,
+    nav,
+    errors: null,
+    review_text: reviewData.review_text,
+    inv_id: reviewData.inv_id,
+    account_id: reviewData.account_id,
+    review_id: reviewData.review_id,
+  });
+};
+
+/* ***************************
+ *  Delete Review Item Process
+ * ************************** */
+invCont.deleteReviewItem = async function (req, res, next) {
+  const review_id = parseInt(req.body.review_id);
+  const deleteResult = await reviewModel.deleteReview(review_id);
+
+  if (deleteResult) {
+    let nav = await utilities.getNav(); //An optional request
+    req.flash("notice", "The review deletion was successful."); //If the deletion is success, the item is deleted
+    res.redirect("/account/");
+  } else {
+    req.flash("notice", "Sorry, the deletion failed."); //If not, the deletion fails.
+    res.redirect("/account/");
   }
 };
 module.exports = invCont;

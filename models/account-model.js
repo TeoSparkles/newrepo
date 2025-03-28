@@ -37,31 +37,32 @@ async function checkExistingEmail(account_email) {
 }
 
 /* *****************************
-* W9 Return account data using email address
-* ***************************** */
-async function getAccountByEmail (account_email) {
+ * W9 Return account data using email address
+ * ***************************** */
+async function getAccountByEmail(account_email) {
   try {
     const result = await pool.query(
-      'SELECT account_id, account_firstname, account_lastname, account_email, account_type, account_password FROM account WHERE account_email = $1',
-      [account_email])
-    return result.rows[0]
+      "SELECT account_id, account_firstname, account_lastname, account_email, account_type, account_password FROM account WHERE account_email = $1",
+      [account_email]
+    );
+    return result.rows[0];
   } catch (error) {
-    return new Error("No matching email found")
+    return new Error("No matching email found");
   }
 }
 
 /* *****************************
-* Return account id using email address
-* ***************************** */
-async function getAccountById (account_id) {
+ * Return account id using email address
+ * ***************************** */
+async function getAccountById(account_id) {
   try {
     const result = await pool.query(
-      'SELECT * FROM public.account WHERE account_id = $1',
-      [account_id])
+      "SELECT * FROM public.account WHERE account_id = $1",
+      [account_id]
+    );
     return result.rows[0];
-
   } catch (error) {
-    return new Error("No matching id found")
+    return new Error("No matching id found");
   }
 }
 
@@ -70,7 +71,7 @@ async function updateAccount(
   account_firstname,
   account_lastname,
   account_email,
-  account_id,
+  account_id
 ) {
   try {
     const sql =
@@ -86,22 +87,42 @@ async function updateAccount(
     console.error("model error: " + error);
   }
 }
-async function updatePassword(
-  hashedPassword,
-  account_id,
-) {
+async function updatePassword(hashedPassword, account_id) {
   try {
     const sql =
       "UPDATE account SET account_password =$1 WHERE account_id = $2 RETURNING *";
-    return await pool.query(sql, [
-      hashedPassword,
-      account_id,
-    ]);
+    return await pool.query(sql, [hashedPassword, account_id]);
   } catch (error) {
     return error.message;
   }
 }
-module.exports = { registerAccount, checkExistingEmail, getAccountByEmail, getAccountById, updateAccount, updatePassword };
+
+async function getReviewByAccountId(account_id) {
+  try {
+    const result = await pool.query(
+      `SELECT * FROM public.review
+      INNER JOIN public.account ON review.account_id = account.account_id
+      INNER JOIN public.inventory ON review.inv_id = inventory.inv_id
+      WHERE account.account_id = $1
+      ORDER BY review.review_date DESC;`, // Order by review_date in descending order
+      [account_id]
+    );
+    return result.rows; // Return all reviews as an array
+  } catch (error) {
+    console.error(error);
+    return new Error("An error occurred while fetching the reviews.");
+  }
+}
+
+module.exports = {
+  registerAccount,
+  checkExistingEmail,
+  getAccountByEmail,
+  getAccountById,
+  updateAccount,
+  updatePassword,
+  getReviewByAccountId
+};
 
 // /* *****************************
 // * Return account id using email address
@@ -113,16 +134,16 @@ module.exports = { registerAccount, checkExistingEmail, getAccountByEmail, getAc
 //         'SELECT * FROM public.account WHERE account_id = $1',
 //         [account_id]
 //       );
-  
+
 //       // Check if a row is returned
 //       if (result.rows.length === 0) {
 //         // If no account found, return null (or throw an error)
 //         return null;  // You could also throw an error here if you prefer
 //       }
-  
+
 //       // Return the first result row (there should only be one)
 //       return result.rows[0];
-      
+
 //     } catch (error) {
 //       // Log the error for debugging and return a message or null
 //       console.error('Error fetching account:', error);

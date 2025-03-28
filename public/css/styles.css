@@ -316,6 +316,19 @@ footer {
   justify-content: center;
   align-items: center;
 }
+.review-item {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  /* align-items: center; */
+  padding: 10px;
+  margin: 10px;
+  background-color: var(--accent2);
+  border: 1px solid var(--secondary-color);
+  border-radius: 0.5rem;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  /* text-align: center; */
+}
 .inv-detail img {
   max-height: 100%;
   max-width: 50%;

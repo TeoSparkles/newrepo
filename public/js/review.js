@@ -1,6 +1,8 @@
 // Build inventory items into HTML table components and inject into DOM 
 function buildReviewList(data) { 
-    let reviewDisplay = document.getElementById("reviewDisplay"); 
+    let reviewDisplay = document.getElementById("reviewDisplay");
+
+    
     // Set up the table labels 
     let dataTable = '<thead>'; 
     dataTable += '<tr><th>Vehicle Name</th><td>&nbsp;</td><td>&nbsp;</td></tr>'; 

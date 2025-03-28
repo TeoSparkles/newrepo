@@ -186,7 +186,7 @@ validate.updatePasswordRules = () => {
   ];
 };
 
-validate.checkUpdateData = async (req, res, next) => {
+validate.checkUpdateAccountData = async (req, res, next) => {
   const { account_firstname, account_lastname, account_email } = req.body;
   let errors = [];
   errors = validationResult(req);

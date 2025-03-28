@@ -6,7 +6,7 @@
     <!--#####Task 1: Creates a header with a client logged in and out, with a hidden "My Account link"#####-->
     <div id="tools">
        <% if (locals.loggedin) { %>
-        <a href="/account">Welcome <%= locals.accountData.account_firstname %></a>
+        <a href="/account">Welcome <%= accountData.account_firstname %></a>
         <a href="/account/logout">Logout</a>
        <% } else { %>
         <a title="Click to log in" href="/account/login">Log in</a>

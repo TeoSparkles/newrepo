@@ -1,10 +1,12 @@
 const utilities = require(".");
 const inventoryModel = require("../models/inventory-model");
+const reviewModel = require("../models/review-model");
+const invModel = require("../models/inventory-model"); // Added this line
 const { body, validationResult } = require("express-validator");
 const { options } = require("../routes/static");
 const validate = {};
 
-/*********************************************Classification Part***********************************************/ 
+/*********************************************Classification Part***********************************************/
 
 /*  **********************************
  *  Registration Data Validation Rules
@@ -50,8 +52,7 @@ validate.checkClassificationData = async (req, res, next) => {
   next();
 };
 
-
-/**************************************************Inventory Part**********************************************/ 
+/**************************************************Inventory Part**********************************************/
 
 /* ************************************
  *  W7 Inventory Data Validation Rules*
@@ -64,7 +65,7 @@ validate.inventoryRules = () => {
       .escape()
       .isLength({ min: 1 })
       .withMessage("Please provide the classification name."),
-      
+
     // W7 Create a validation of make inventory or brand.
     body("inv_make")
       .trim()
@@ -95,7 +96,7 @@ validate.inventoryRules = () => {
       .escape()
       .isLength({ min: 1 })
       .isString()
-      .withMessage("Description must include a path name.")      
+      .withMessage("Description must include a path name.")
       // The regex function shows like this.
       .matches(/\.(jpg|jpeg|png|gif)$/i)
       .withMessage("Please use an image filepath."),
@@ -106,11 +107,11 @@ validate.inventoryRules = () => {
       .escape()
       .isLength({ min: 1 })
       .isString()
-      .withMessage("Description must include a path name.")      
+      .withMessage("Description must include a path name.")
       // The regex function shows like this.
       .matches(/\.(jpg|jpeg|png|gif)$/i)
       .withMessage("Please use an image filepath thumbnail."),
-    
+
     //Create an inventory price rule using an integer.
     body("inv_price")
       .trim()
@@ -129,16 +130,14 @@ validate.inventoryRules = () => {
       .isLength({ min: 1 })
       .withMessage("Please provide miles."),
 
-    //Create a color rule to provide a color. 
+    //Create a color rule to provide a color.
     body("inv_color")
       .trim()
       .escape()
       .isAlpha()
       .withMessage("Please enter a color.")
       .isLength({ min: 1 })
-      .withMessage("Please provide a color.")
-      ,
-
+      .withMessage("Please provide a color."),
     //Set a year with a maximum of 4 length.
     body("inv_year")
       .trim()
@@ -240,22 +239,24 @@ validate.checkUpdateData = async (req, res, next) => {
   next();
 };
 
-
 validate.reviewRules = () => {
   return [
-    //Creates the classification ID that encounters the classification name of the list
-    body("screenName")
-      .trim()
-      .escape()
-      .isLength({ min: 1 })
-      .withMessage("Please provide the screen name."),
-
+    // Validate review text
     body("review_text")
       .trim()
       .escape()
       .isString()
-      .isLength({ min: 1 })
-      .withMessage("Please comment the review."),
+      .isLength({ min: 1, max: 500 }) // Set a maximum length of 500 characters
+      .withMessage("Please comment the review (maximum 500 characters).")
+      .custom((review_text) => {
+        const prohibitedWords = ["spam", "offensive"]; // Example prohibited words
+        for (const word of prohibitedWords) {
+          if (review_text.toLowerCase().includes(word)) {
+            throw new Error("Review contains prohibited content.");
+          }
+        }
+        return true;
+      }),
   ];
 };
 
@@ -263,32 +264,72 @@ validate.reviewRules = () => {
  * Check data and return errors or continue to add classification*
  * ***************************************************************/
 validate.checkReviewData = async (req, res, next) => {
-  const {
-    review_text,
-    review_date,
-    account_id,
-    inv_id,
-  } = req.body;
+  const { review_text } = req.body;
 
-  //Create a list of validation errors in a set of inventory rules.
-  let errors = [];
-  errors = validationResult(req);
+  let errors = validationResult(req);
   if (!errors.isEmpty()) {
-    let nav = await utilities.getNav();
-    // const classificationList = await utilities.buildClassificationList();
-    res.render("inventory/classification", {
-      errors,
-      title: "Inventory Details",
+    const inv_id = req.params.inv_id;
+    const data = await invModel.getInventoryByInventoryId(inv_id);
+
+    if (!data || data.length === 0) {
+      throw new Error("Inventory not found");
+    }
+
+    const accountData = res.locals.accountData;
+    const reviewData = await invModel.getReviewByInventoryId(inv_id); // Added 'await' and used inv_id directly
+    const grid = await utilities.buildInventoryGrid(
+      data,
+      reviewData,
+      accountData
+    );
+    const nav = await utilities.getNav();
+    const brand = data[0].inv_make;
+    const model = data[0].inv_model;
+    const year = data[0].inv_year;
+
+    res.render("./inventory/classification", {
+      title: `${year} ${brand} ${model}`,
       nav,
+      grid,
+      errors,
       review_text,
-      review_date,
-      account_id,
-      inv_id,
     });
     return;
   }
   next();
 };
 
+/* *********************************************************
+ * Check data and return errors or continue to add classification*
+ * *********************************************************/
+validate.checkUpdateReviewData = async (req, res, next) => {
+  const { review_id, review_text, account_id, inv_id } = req.body;
+  let errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    try {
+      // const review = parseInt(req.params.review_id);
+      // const reviewData = await reviewModel.getReviewById(review);
+      // const brand = reviewData.inv_make;
+      // const model = reviewData.inv_model;
+      // const year = reviewData.inv_year;
+      let nav = await utilities.getNav();
+
+      res.render("inventory/edit-review", {
+        errors,
+        title: "Edit Review",
+        nav,
+        review_id,
+        review_text,
+        account_id, // Included account_id
+        inv_id, // Included inv_id
+      });
+    } catch (error) {
+      console.error("Error loading review for editing:", error.message);
+      next(error); // Pass the error to the next middleware
+    }
+    return;
+  }
+  next();
+};
 
 module.exports = validate;

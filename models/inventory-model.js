@@ -137,8 +137,7 @@ async function updateInventory(
   classification_id
 ) {
   try {
-    const sql =
-      "UPDATE public.inventory SET inv_make = $1, inv_model = $2, inv_description = $3, inv_image = $4, inv_thumbnail = $5, inv_price = $6, inv_year = $7, inv_miles = $8, inv_color = $9, classification_id = $10 WHERE inv_id = $11 RETURNING *";
+    const sql = `UPDATE public.inventory SET inv_make = $1, inv_model = $2, inv_description = $3, inv_image = $4, inv_thumbnail = $5, inv_price = $6, inv_year = $7, inv_miles = $8, inv_color = $9, classification_id = $10 WHERE inv_id = $11 RETURNING *`;
     const data = await pool.query(sql, [
       inv_make,
       inv_model,
@@ -168,25 +167,29 @@ async function deleteInventoryItem(inv_id) {
   }
 }
 
-async function getReviewById(review_id) {
-  return await pool.query("SELECT * FROM public.review WHERE review_id = $1");
+async function getReviewByInventoryId(inv_id) {
+  try {
+    const data = await pool.query(
+      `SELECT * FROM public.review AS r 
+      JOIN public.account AS a 
+      ON r.account_id = a.account_id 
+      WHERE r.inv_id = $1`,
+      [inv_id]
+    );
+    return data.rows;
+  } catch (error) {
+    console.error("getReviewByInventoryId error: " + error);
+  }
 }
 
 /* ********************************
  *  W12 Use this to process the customer review*
  * ****************************** */
-async function registerReview(
-  review_text, 
-  inv_id, 
-  account_id) {
+async function registerReview(review_text, inv_id, account_id) {
   try {
-    const sql = 
-      `INSERT INTO review (review_text, review_date, inv_id, account_id)
+    const sql = `INSERT INTO review (review_text, review_date, inv_id, account_id)
       VALUES ($1, NOW(), $2, $3) RETURNING *`;
-    return await pool.query(sql, [
-      review_text, 
-      inv_id, 
-      account_id]);
+    return await pool.query(sql, [review_text, inv_id, account_id]);
   } catch (error) {
     return error.message;
   }
@@ -199,8 +202,8 @@ async function getReviewIdByAccountId(account_id) {
       ON a.account_id = r.account_id 
       WHERE r.account_id = $1`,
       [account_id]
-    )
-    return data.rows
+    );
+    return data.rows;
   } catch (error) {
     return error.message;
   }
@@ -215,7 +218,7 @@ module.exports = {
   getInventoryById,
   updateInventory,
   deleteInventoryItem,
-  getReviewById,
+  getReviewByInventoryId,
   registerReview,
   getReviewIdByAccountId,
 };

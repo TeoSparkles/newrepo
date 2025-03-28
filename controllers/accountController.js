@@ -33,14 +33,20 @@ async function buildRegister(req, res, next) {
 }
 
 /* ****************************************
- *  Deliver account management view
+ *  W12 Deliver account management view
  * *************************************** */
 async function accountManagement(req, res, next) {
+  //W12 create a review list.
+  // const account_id = parseInt(res.params.account_id);
+  const account_id = res.locals.accountData.account_id;
+  const data = await accountModel.getReviewByAccountId(account_id)
+  const reviewList = await utilities.buildReviewList(data);
   let nav = await utilities.getNav();
   res.render("./account/account", {
     title: "Account Management",
     nav,
     errors: null,
+    reviewList
   });
 }
 
@@ -179,11 +185,15 @@ async function updateAccount(req, res) {
   );
 
   if (updateResult) {
+    const account_id = res.locals.accountData.account_id;
+    const data = await accountModel.getReviewByAccountId(account_id)
+    const reviewList = await utilities.buildReviewList(data);
     req.flash("notice", `Account updated.`);
     res.render("account/account", {
       title: "Account Management",
       nav,
       errors: null,
+      reviewList,
     });
   } else {
     req.flash("notice", "Sorry, update account failed.");
@@ -191,6 +201,7 @@ async function updateAccount(req, res) {
       title: "Account Management",
       nav,
       errors: null,
+      reviewList,
     });
   }
 }
