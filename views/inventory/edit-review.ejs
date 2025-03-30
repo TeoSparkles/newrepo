@@ -9,39 +9,41 @@
   <% } %>
 </div>
 
-<form action="/inv/detail/edit/review" method="post" class="form-account">
+<form action="/inv/detail/edit/review" method="post" id="updateEditForm" class="form-account">
   <fieldset>
     <div class="form-account-content">
-        <label for="screenName">Screen Name:</label><br />
-        <input
-          type="text"
-          id="screenName"
-          value="<%= accountData.account_firstname[0] + accountData.account_lastname %>"
-          readonly
-        />
-        </div>
-    <div class="form-account-content">
-        <label for="reviewText">Review text:</label><br />
-         <textarea
-                  name="review_text"
-                  id="reviewText"
-                  required
-                  minlength="3"
-                ><%= locals.review_text %></textarea>
-        <% if (accountData.account_id) { %>
-          <input type="hidden" name="account_id" value="<%= accountData.account_id %>">
-        <% } %>
-        <% if (locals.inv_id) { %>
-          <input type="hidden" name="inv_id" value="<%= locals.inv_id %>">
-        <% } %>
-        <% if (locals.review_id) { %>
-            <input type="hidden" name="review_id" value="<%= locals.review_id %>">
-          <% } %>
-        <br>
-        <div class="form-account-button">
-          <button type="submit">Edit Review</button>
-        </div>
+      <label for="screenName">Screen Name:</label><br />
+      <input
+        type="text"
+        id="screenName"
+        value="<%= accountData.account_firstname[0] + accountData.account_lastname %>"
+        readonly
+      />
     </div>
-    
+    <div class="form-account-content">
+      <label for="reviewText">Review text:</label><br />
+      <textarea
+        name="review_text"
+        id="reviewText"
+        required
+        minlength="3"
+      ><%= locals.review_text %></textarea>
+    </div>
+    <% if (accountData.account_id) { %>
+      <input type="hidden" name="account_id" value="<%= accountData.account_id %>">
+    <% } %>
+    <% if (locals.inv_id) { %>
+      <input type="hidden" name="inv_id" value="<%= locals.inv_id %>">
+    <% } %>
+    <% if (locals.review_id) { %>
+      <input type="hidden" name="review_id" value="<%= locals.review_id %>">
+    <% } %>
+    <br>
+    <div class="form-account-button">
+      <button type="submit" disabled>Edit Review</button>
+      <button type="button" onclick="window.history.back();">Cancel</button>
+
+    </div>
   </fieldset>
 </form>
+<script src="/js/invedit.js"></script>

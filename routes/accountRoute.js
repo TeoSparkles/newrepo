@@ -74,4 +74,13 @@ router.get(
   utilities.checkLogout,
   utilities.handleErrors(accountController.accountLogout)
 ); //regValidate.checkLogout
+
+//Optional: Compose the messages to the user
+// router.get("/messages", utilities.handleErrors(accountController.buildMessages));
+
+//W12: Send the messages to the user
+// router.post(
+//   "/messages",
+//   utilities.handleErrors(accountController.sendMessages)
+// );
 module.exports = router;

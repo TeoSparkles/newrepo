@@ -60,8 +60,9 @@
         <% if(locals.inv_id) { %> value="<%= locals.inv_id %>"
         <% } %>>
     <div class="form-account-button">
-      <span>Confirm Deletion? The delete vehicle is permanent and cannot be undone!</span>
+      <span>Confirm Deletion? The delete vehicle is permanent and cannot be undone!</span><br />
       <button type="submit">Delete Vehicle</button>
+      <button type="button" onclick="window.history.back();">Cancel</button>
     </div>
     
   </fieldset>

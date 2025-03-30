@@ -1,0 +1,35 @@
+<h1><%- title %></h1>
+
+<div id="messages">
+  <% if (errors) { %>
+  <ul class="notice">
+    <% errors.array().forEach(error => { %>
+    <li><%= error.msg %></li>
+    <% }) %>
+  </ul>
+  <% } %>
+</div>
+
+<form action="/account/compose" method="post" class="form-account">
+  <fieldset>
+    <div class="form-account-content">
+        <label for="message_to">To:</label><br />
+        <input type="text" name="message_to" id="message_to" required />
+        </div>
+    <div class="form-account-content">
+        <label for="message_from">From:</label><br />
+        <input type="text" name="message_from" id="message_from" readonly value = <%=accountData.account_id%> />
+        </div>
+    <div class="form-account-content">
+        <label for="message_subject">Subject:</label><br />
+        <input type="text" name="message_subject" id="message_subject" required />
+        </div>
+    <div class="form-account-content">
+        <label for="message_body">Message:</label><br />
+        <textarea name="message_body" id="message_body" required></textarea>
+        </div>
+    <div class="form-account-button">
+      <button type="submit">Send</button>
+    </div>
+  </fieldset>
+</form>

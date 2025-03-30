@@ -34,9 +34,9 @@ invCont.buildByInventoryId = async function (req, res, next) {
     if (!data || data.length === 0) {
       throw new Error("Inventory not found");
     }
-
     const accountData = res.locals.accountData;
     const reviewData = await invModel.getReviewByInventoryId(inv_id); // Added 'await' and used inv_id directly
+    // const errors = null; // Initialize errors
     const grid = await utilities.buildInventoryGrid(data, reviewData, accountData);
     const nav = await utilities.getNav();
     const brand = data[0].inv_make;
@@ -332,7 +332,7 @@ invCont.deleteInventoryView = async function (req, res, next) {
   const inv_id = parseInt(req.params.inv_id);
   const itemData = await invModel.getInventoryById(inv_id);
   // const classificationList = await utilities.buildClassificationList(itemData.classification_id)
-  const itemName = `${itemData.inv_make} ${itemData.inv_model}`;
+  const itemName = `${itemData.inv_make} ${itemData.inv_model}?`;
   res.render("./inventory/delete-confirm", {
     title: "Delete " + itemName,
     nav,
@@ -384,6 +384,8 @@ invCont.editReviewView = async function (req, res, next) {
       review_text: reviewData.review_text,
       inv_id: reviewData.inv_id,
       account_id: reviewData.account_id,
+      account_firstname: reviewData.account_firstname,
+      account_lastname: reviewData.account_lastname,
       review_id: reviewData.review_id,
     });
   } catch (error) {
@@ -395,7 +397,6 @@ invCont.editReviewView = async function (req, res, next) {
  *  Process edit reviews
  * ************************** */
 invCont.editReview = async function (req, res, next) {
-  // invCont.updateInventory = async function (req, res, next) {
     let nav = await utilities.getNav();
     const {
       review_id,
@@ -410,8 +411,8 @@ invCont.editReview = async function (req, res, next) {
     );
   
     if (reviewResult) {
-      const itemName = reviewResult.review_text;
-      req.flash("notice", `The ${itemName} was successfully updated.`);
+      // const itemName = reviewResult.review_text;
+      req.flash("notice", `Review updated.`);
       res.redirect("/account/");
     } else {
       req.flash("notice", "Review failed.");
@@ -438,6 +439,8 @@ invCont.deleteReviewView = async function (req, res, next) {
     review_text: reviewData.review_text,
     inv_id: reviewData.inv_id,
     account_id: reviewData.account_id,
+    account_firstname: reviewData.account_firstname,
+    account_lastname: reviewData.account_lastname,
     review_id: reviewData.review_id,
   });
 };

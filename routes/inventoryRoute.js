@@ -91,7 +91,7 @@ router.post(
 
 //W12 Edit Review
 router.get(
-  "/detail/edit/review/:review_id",
+  "/detail/edit/review/:review_id", utilities.checkAccountId,
   utilities.handleErrors(invController.editReviewView)
 );
 //W12 Edit Review
@@ -103,7 +103,7 @@ router.post(
 );
 
 router.get(
-  "/detail/delete/:review_id",
+  "/detail/delete/:review_id", utilities.checkAccountId,
   utilities.handleErrors(invController.deleteReviewView)
 );
 

@@ -12,38 +12,36 @@
 <form action="/inv/detail/delete/review" method="post" class="form-account">
   <fieldset>
     <div class="form-account-content">
-        <label for="screenName">Screen Name:</label><br />
-        <input
-          type="text"
-          id="screenName"
-          value="<%= accountData.account_firstname[0] + accountData.account_lastname %>"
-          readonly
-        />
-        </div>
-    <div class="form-account-content">
-        <label for="reviewText">Review text:</label><br />
-         <textarea
-                  name="review_text"
-                  id="reviewText"
-                  required
-                  minlength="3"
-                  readonly
-                ><%= locals.review_text %></textarea>
-        <% if (accountData.account_id) { %>
-          <input type="hidden" name="account_id" value="<%= accountData.account_id %>">
-        <% } %>
-        <% if (locals.inv_id) { %>
-          <input type="hidden" name="inv_id" value="<%= locals.inv_id %>">
-        <% } %>
-        <% if (locals.review_id) { %>
-            <input type="hidden" name="review_id" value="<%= locals.review_id %>">
-          <% } %>
-        <br>
-        <div class="form-account-button">
-            <span>Delete your review? This cannot be undone!</span>
-          <button type="submit">Delete Review</button>
-        </div>
+      <label for="screenName">Screen Name:</label><br />
+      <input
+        type="text"
+        id="screenName"
+        value="<%= locals.account_firstname[0] + locals.account_lastname %>"
+        readonly
+      />
     </div>
-    
+    <div class="form-account-content">
+      <label for="reviewText">Review text:</label><br />
+      <textarea
+        name="review_text"
+        id="reviewText"
+        readonly
+      ><%= locals.review_text %></textarea>
+    </div>
+    <% if (locals.account_id) { %>
+      <input type="hidden" name="account_id" value="<%= locals.account_id %>">
+    <% } %>
+    <% if (locals.inv_id) { %>
+      <input type="hidden" name="inv_id" value="<%= locals.inv_id %>">
+    <% } %>
+    <% if (locals.review_id) { %>
+      <input type="hidden" name="review_id" value="<%= locals.review_id %>">
+    <% } %>
+    <br>
+    <div class="form-account-button">
+      <span>Delete your review? This cannot be undone!</span>
+      <button type="submit">Delete Review</button>
+      <button type="button" onclick="window.history.back();">Cancel</button>
+    </div>
   </fieldset>
 </form>

@@ -1,5 +1,6 @@
 const utilities = require("../utilities");
 const accountModel = require("../models/account-model");
+const messageModel = require("../models/message-model");
 const bcrypt = require("bcryptjs");
 
 const jwt = require("jsonwebtoken");
@@ -254,6 +255,20 @@ async function accountLogout(req, res) {
   });
 }
 
+/* ****************************************
+ *  Compose the messages to the user
+ * *************************************** */
+// async function buildMessages(req, res, next) {
+//   let nav = await utilities.getNav();
+//   const accountData = res.locals.accountData.account_id;
+//   // const data = await accountModel.getAccountById(account_id);
+//   res.render("account/messages/compose-message", {
+//     title: "Compose Message",
+//     nav,
+//     errors: null,
+//     message_from: accountData.account_id,
+//   });
+// }
 module.exports = {
   buildLogin,
   buildRegister,
@@ -266,5 +281,6 @@ module.exports = {
   // buildChangePassword,
   updateAccount,
   updatePassword,
+  // buildMessages
   // Logout
 };

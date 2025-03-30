@@ -261,7 +261,7 @@ validate.reviewRules = () => {
 };
 
 /* ***************************************************************
- * Check data and return errors or continue to add classification*
+ * Check data and return errors or continue to add reviews*
  * ***************************************************************/
 validate.checkReviewData = async (req, res, next) => {
   const { review_text } = req.body;
@@ -272,7 +272,13 @@ validate.checkReviewData = async (req, res, next) => {
     const data = await invModel.getInventoryByInventoryId(inv_id);
 
     if (!data || data.length === 0) {
-      throw new Error("Inventory not found");
+      let nav = await utilities.getNav();
+      res.status(404).render("error", {
+        title: "Inventory Not Found",
+        nav,
+        message: "The requested inventory could not be found.",
+      });
+      return;
     }
 
     const accountData = res.locals.accountData;
@@ -321,6 +327,8 @@ validate.checkUpdateReviewData = async (req, res, next) => {
         review_id,
         review_text,
         account_id, // Included account_id
+        // account_firstname,
+        // account_lastname,
         inv_id, // Included inv_id
       });
     } catch (error) {
