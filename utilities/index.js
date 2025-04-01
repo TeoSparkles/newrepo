@@ -131,7 +131,7 @@ Util.buildInventoryGrid = async function (data, reviewData, accountData) {
         });
       } else {
         grid +=
-          "<div class='FirstReview'><p>Be the first to write a review.</p></div>";
+          "<div class='FirstReview'><p><i>Be the first to write a review</i></p></div>";
       }
       grid += `<h3><b>Write a Review</b></h3>`;
       if (accountData) {
@@ -164,11 +164,11 @@ Util.buildInventoryGrid = async function (data, reviewData, accountData) {
   </form>`;
       } else {
         grid +=
-          "<p>You must <a href='/account/login'>log in</a> to review.</p>";
+          "<p class=FirstReview><i>You must <a href='/account/login'>log in</a> to review</i></p>";
       }
     });
   } else {
-    grid += '<p class="notice">Sorry, no matching vehicles could be found.</p>';
+    grid += '<p class="notice">Sorry, no matching vehicles could be found</p>';
   }
 
   return grid;
@@ -324,14 +324,14 @@ Util.buildReviewList = async function (data) {
       list += `<tr>`;
       list += `<td><a href="/inv/detail/${review.inv_id}" class="view-link">View Vehicle</a></td>`;
       list += `<td><a href="/inv/detail/edit/review/${review.review_id}" class="edit-link">Edit</a></td>`;
-      list += `<td><a href="/inv/detail/delete/${review.review_id}" class="delete-link">Delete</a></td>`;
+      list += `<td><a href="/inv/detail/delete/review/${review.review_id}" class="delete-link">Delete</a></td>`;
       list += `</tr>`;
       list += `</table>`;
       list += `</div>`;
       // list += "</div>";
     });
   } else {
-    list += '<p class="notice">No reviews.</p>';
+    list += '<p class="item-notice"><i>No reviews</i></p>';
   }
 
   return list;

@@ -1,7 +1,3 @@
-<div id="messages">
-    <%- messages() %>
-  </div>
-
   <div id="messages">
     <% if (errors) { %>
     <ul class="notice">
@@ -10,6 +6,7 @@
       <% }) %>
     </ul>
     <% } %>
+    <%- messages() %>
   </div>
 
 <!-- Assignment 5 -->

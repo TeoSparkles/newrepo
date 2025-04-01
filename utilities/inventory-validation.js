@@ -313,22 +313,19 @@ validate.checkUpdateReviewData = async (req, res, next) => {
   let errors = validationResult(req);
   if (!errors.isEmpty()) {
     try {
-      // const review = parseInt(req.params.review_id);
-      // const reviewData = await reviewModel.getReviewById(review);
-      // const brand = reviewData.inv_make;
-      // const model = reviewData.inv_model;
-      // const year = reviewData.inv_year;
+      const reviewData = await reviewModel.getReviewById(review_id); // Changed 'review' to 'review_id'
+      const brand = reviewData.inv_make;
+      const model = reviewData.inv_model;
+      const year = reviewData.inv_year;
       let nav = await utilities.getNav();
 
       res.render("inventory/edit-review", {
         errors,
-        title: "Edit Review",
+        title: `Edit ${year} ${brand} ${model} Review`,
         nav,
         review_id,
         review_text,
         account_id, // Included account_id
-        // account_firstname,
-        // account_lastname,
         inv_id, // Included inv_id
       });
     } catch (error) {

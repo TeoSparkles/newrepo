@@ -119,11 +119,16 @@ header {
 #tools {
   float: right;
   margin-top: 4%;
+  padding: 0px 5px;
   /* margin-right: 20px; */
   font-size: 18px;
 }
 #tools a {
   text-decoration: none;
+  padding: 5px;
+}
+#tools a:hover {
+  text-decoration: underline;
 }
 
 /* The navigation area. */
@@ -131,7 +136,6 @@ nav {
   /* margin-top: 20px; */
   background-color: var(--accent1);
   width: 100%;
-
   text-align: center;
   border: 1px solid var(--secondary-color);
   box-shadow: 0px 0px 10px var(--primary-color);
@@ -158,6 +162,7 @@ nav a {
   padding: 20px;
   color: hsl(0, 0%, 100%);
   text-decoration: none;
+  border-radius: 0.5rem;
 }
 nav a:hover {
   background-color: white;
@@ -430,6 +435,11 @@ button{
   padding: 5px;
   font-size: 20px;
 }
+
+.item-notice{
+  text-align: center;
+  font-size: 20px;
+}
 /**************************** Error Message Screen ************************************/
 .error-display {
   text-align: center;
@@ -437,7 +447,11 @@ button{
   padding: 20px;
 }
 .FirstReview{
-  background-color: yellow;
+  /* background-color: yellow; */
+  margin: 10px;
+  padding: 10px;
+  text-align: center;
+  font-size: 20px;
 }
 .error-display h1 {
   font-size: 80px;
@@ -471,7 +485,6 @@ button{
 .table-item {
   display: grid;
   grid-template-columns: 1fr;
-  max-width: auto;
   height: auto;
   margin: 10px auto;
   /* border: solid black 1px; */
@@ -502,12 +515,7 @@ button{
   background-color: var(--accent1);
   color: white;
 }
-.notice{
-  font-size: 16px;
-  color: var(--primary-color);
-  text-align: center;
-  margin: 20px;
-}
+
 
 /*----------------------------Inventory Management Display --------------------------------*/
 #inventoryDisplay{
@@ -560,6 +568,7 @@ justify-content: center;
   #tools {
     font-size: 14px;
   }
+  
 
   .content {
     display: grid;

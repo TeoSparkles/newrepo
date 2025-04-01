@@ -2,6 +2,7 @@
 const express = require("express");
 const router = new express.Router();
 const invController = require("../controllers/invController");
+const reviewController =require("../controllers/reviewController");
 const utilities = require("../utilities");
 
 // Validate register
@@ -86,30 +87,30 @@ router.post(
   "/detail/:inv_id",
   regValidate.reviewRules(), // Validation rules for review input
   regValidate.checkReviewData, // Middleware to check validation results
-  utilities.handleErrors(invController.addReview) // Controller to handle adding the review
+  utilities.handleErrors(reviewController.addReview) // Controller to handle adding the review
 );
 
 //W12 Edit Review
 router.get(
   "/detail/edit/review/:review_id", utilities.checkAccountId,
-  utilities.handleErrors(invController.editReviewView)
+  utilities.handleErrors(reviewController.editReviewView)
 );
 //W12 Edit Review
 router.post(
   "/detail/edit/review",
   regValidate.reviewRules(), // Validation rules for review input
   regValidate.checkUpdateReviewData, // Middleware to check validation results
-  utilities.handleErrors(invController.editReview)
+  utilities.handleErrors(reviewController.editReview)
 );
 
 router.get(
-  "/detail/delete/:review_id", utilities.checkAccountId,
-  utilities.handleErrors(invController.deleteReviewView)
+  "/detail/delete/review/:review_id", utilities.checkAccountId,
+  utilities.handleErrors(reviewController.deleteReviewView)
 );
 
 router.post(
   "/detail/delete/review",
-  utilities.handleErrors(invController.deleteReviewItem)
+  utilities.handleErrors(reviewController.deleteReviewItem)
 );
 
 module.exports = router;
